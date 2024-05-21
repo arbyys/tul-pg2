@@ -5,9 +5,6 @@
 #include <random>
 #include <sstream>
 
-// OpenCV – GL independent
-//#include <opencv2\opencv.hpp>
-
 // OpenGL Extension Wrangler: allow all multiplatform GL functions
 #include <GL/glew.h> 
 // WGLEW = Windows GL Extension Wrangler (change for different platform) 
@@ -54,8 +51,8 @@ App::App()
 void App::InitAssets()
 {
     // load models, load textures, load shaders, initialize level, etc...
-    std::filesystem::path VS_path("./resources/basic.vert");
-    std::filesystem::path FS_path("./resources/basic.frag");
+    std::filesystem::path VS_path("./resources/shaders/shader.vert");
+    std::filesystem::path FS_path("./resources/shaders/shader.frag");
     my_shader = ShaderProgram(VS_path, FS_path);
 
     //std::filesystem::path model_path("./resources/objects/bunny_tri_vn.obj");
@@ -64,7 +61,7 @@ void App::InitAssets()
     //std::filesystem::path model_path("./resources/objects/cube_triangles_normals_tex.obj");
     //std::filesystem::path model_path("./resources/objects/plane_tri_vnt.obj");
     //std::filesystem::path model_path("./resources/objects/sphere_tri_vnt.obj");
-    std::filesystem::path model_path("./resources/objects/teapot_tri_vnt.obj");
+    std::filesystem::path model_path("./resources/objects/chair.obj");
     Model my_model = Model(model_path);    
     
     scene_lite.push_back(my_model);
