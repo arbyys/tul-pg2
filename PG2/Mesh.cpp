@@ -47,15 +47,17 @@ Mesh::Mesh(GLenum primitive_type, std::vector<Vertex>& vertices, std::vector<GLu
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 };
 
-void Mesh::Draw(const ShaderProgram& shader) const {
+void Mesh::Draw( ShaderProgram& shader) const {
     // TODO: Mesh::Draw
-    // set uniform variables: color
+    
     //set texture id etc...
-    //if (texture_id > 0) {
-    //    glActiveTexture(GL_TEXTURE0);
-    //    glBindTexture(GL_TEXTURE_2D, texture_id);
-    //    shader.setUniform("mytexture", 0);
-    //}
+    if (texture_id > 0) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture_id);
+        shader.SetUniform("texture", 0);
+        
+
+    }
 
     //???: draw mesh: bind vertex array object, draw all elements with selected primitive type, unbind vertex array object
     glBindVertexArray(VAO);
@@ -76,5 +78,6 @@ void Mesh::Clear(void) {
     glDeleteBuffers(1, &EBO);
     //glDeleteVertexArrays... // VAO
     glDeleteVertexArrays(1, &VAO);
+    if (texture_id) { glDeleteTextures(1, &texture_id); texture_id = 0; }
     // Destruktor ne-e
 };
