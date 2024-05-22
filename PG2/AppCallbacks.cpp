@@ -13,35 +13,52 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
 
     if ((action == GLFW_PRESS) || (action == GLFW_REPEAT)) {
         switch (key) {
-        case GLFW_KEY_ESCAPE:
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-            break;
-        case GLFW_KEY_F:
-            is_fullscreen_on = !is_fullscreen_on;
-            if (is_fullscreen_on) {
-                glfwGetWindowPos(window, &window_xcor, &window_ycor);
-                glfwGetWindowSize(window, &window_width_return_from_fullscreen, &window_height_return_from_fullscreen);
-                if (window_height_return_from_fullscreen == 0) window_height_return_from_fullscreen++;
-                glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-            }
-            else {
-                glfwSetWindowMonitor(window, nullptr, window_xcor, window_ycor, window_width_return_from_fullscreen, window_height_return_from_fullscreen, 0);
-            }
-            break;
-        case GLFW_KEY_V:
-            this_inst->audio.Play2DOneShot("sound_teleport");
-            is_vsync_on = !is_vsync_on;
-            glfwSwapInterval(is_vsync_on);
-            std::cout << "VSync: " << is_vsync_on << "\n";
-            break;
-        case GLFW_KEY_LEFT_CONTROL:
-            camera.ToggleSprint();
-            break;
+            case GLFW_KEY_ESCAPE:
+                // implementovat pauzu mouse-looku
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                break;
+            case GLFW_KEY_LEFT_CONTROL:
+                camera.ToggleSprint();
+                break;
+            case GLFW_KEY_SPACE:
+                // skok
+                break;
+            case GLFW_KEY_F:
+                // fullscreen už hotovo?
+                is_fullscreen_on = !is_fullscreen_on;
+                if (is_fullscreen_on) {
+                    glfwGetWindowPos(window, &window_xcor, &window_ycor);
+                    glfwGetWindowSize(window, &window_width_return_from_fullscreen, &window_height_return_from_fullscreen);
+                    if (window_height_return_from_fullscreen == 0) window_height_return_from_fullscreen++;
+                    glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+                }
+                else {
+                    glfwSetWindowMonitor(window, nullptr, window_xcor, window_ycor, window_width_return_from_fullscreen, window_height_return_from_fullscreen, 0);
+                }
+                break;
+            case GLFW_KEY_V:
+                // vsync odstranit zvuk, už hotovo?
+                this_inst->audio.Play2DOneShot("sound_teleport");
+                is_vsync_on = !is_vsync_on;
+                glfwSwapInterval(is_vsync_on);
+                std::cout << "VSync: " << is_vsync_on << "\n";
+                break;
+            case GLFW_KEY_R:
+                // reset sklenièek
+                break;
+            case GLFW_KEY_KP_SUBTRACT:
+                // minus fov
+                break;
+            case GLFW_KEY_KP_ADD:
+                // plus fov
+                break;
         }
     }
 }
 
 void App::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    // fov udìlat víc smooth a pøedìlat na plus a minus
+
     auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
     this_inst->FOV += 10.0f * static_cast<float>(yoffset);
     this_inst->FOV = std::clamp(this_inst->FOV, 20.0f, 170.0f); // limit FOV to reasonable values...
