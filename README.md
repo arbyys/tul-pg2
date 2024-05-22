@@ -8,10 +8,24 @@
 - https://github.com/jirihalbych/PG2
 
 ## Popis aplikace
-- todo
+- **vlastnosti**
+	- náhodně jezdící kolečková židle
+	- střela do židle ji teleportuje na jiné (náhodné) místo
+	- skleničky s vínem na stole, rozbijou se při střele
+- **ovládání**
+	- `WSAD`: pohyb
+	- `LMB`: výstřel
+	- `Space`: skok
+	- `LCtrl`: sprint (držení)
+	- `ESC`: ovládání kamery myší (toggle)
+	- `F`: fullscreen
+	- `V`: ovládání vsync
+	- `R`: obnova rozbitých skleniček
+	- `+` / `-`: změna FOV
 
 ## Temp poznámky
-- 
+- domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
+- implementovat skok
 
 ## Povinné požadavky [✔ ❌]
 - ✔ 3D GL Core shaders at least 4.5, GL debug

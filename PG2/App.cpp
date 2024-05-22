@@ -50,6 +50,10 @@ App::App()
 
 void App::InitAssets()
 {
+    glm::vec3 position{};
+    float scale{};
+    glm::vec4 rotation{};
+
     // load models, load textures, load shaders, initialize level, etc...
     std::filesystem::path VS_path("./resources/shaders/shader.vert");
     std::filesystem::path FS_path("./resources/shaders/shader.frag");
@@ -57,12 +61,22 @@ void App::InitAssets()
 
     //load models
     std::filesystem::path model_path("./resources/objects/chair.obj");
+    std::filesystem::path model_path2("./resources/objects/sphere.obj");
     Model my_model = Model(model_path);
-
     Model map = Model::CreateTerrain();
     
-    scene_lite.push_back(my_model);
     scene_lite.push_back(map);
+    scene_lite.push_back(my_model);
+
+    print("Loading projectiles:");
+    position = glm::vec3(0.0f, -10.0f, 0.0f); // Hidden
+    scale = 0.05f;
+    rotation = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    for (int i = 0; i < N_PROJECTILES; i++) {
+        auto name = "obj_projectile_" + std::to_string(i);
+        auto obj_projectile_x = new Model(model_path2);
+        projectiles[i] = obj_projectile_x;
+    }
 }
 
 // App initialization, if returns true then run run()
@@ -164,6 +178,8 @@ int App::Run(void)
         glm::vec3 camera_movement{};
 
         glm::vec4 my_rgba = { 0.28f, 0.94f, 0.12f, 1.0f };
+
+        audio.PlayBgMusic();
 
         while (!glfwWindowShouldClose(window))
         {
