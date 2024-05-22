@@ -12,8 +12,7 @@ uniform vec4 uRGBA;
 out vec4 color; // optional output attribute
 
 // VS -> FS
-//out vec3 o_fragment_position; //todo tohle jsem sem pridal ale zatim to neni potreba
-out vec2 o_texture_coordinate //todo tohle je potřeba nevim kde to vzit
+//out vec2 o_texture_coordinate; //todo tohle je potřeba nevim kde to vzit
 
 void main()
 {
