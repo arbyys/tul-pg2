@@ -9,6 +9,7 @@ void App::error_callback(int error, const char* description)
 
 void App::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
 
     if ((action == GLFW_PRESS) || (action == GLFW_REPEAT)) {
         switch (key) {
@@ -28,6 +29,7 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
             }
             break;
         case GLFW_KEY_V:
+            this_inst->audio.Play2DOneShot("sound_teleport");
             is_vsync_on = !is_vsync_on;
             glfwSwapInterval(is_vsync_on);
             std::cout << "VSync: " << is_vsync_on << "\n";
