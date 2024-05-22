@@ -7,6 +7,8 @@
 #include "Camera.hpp"
 #include "Audio.hpp"
 
+#define N_PROJECTILES 10
+
 class App {
 public:
     App();
@@ -53,4 +55,13 @@ private:
 
     ShaderProgram my_shader;
     Audio audio;
+
+    // projectiles
+    const float projectile_speed = 20.0f;
+    int projectile_n = 0;                   // Currently used projectile
+    Model* projectiles[N_PROJECTILES]{};    // Pool of projectiles
+    glm::vec3 projectile_directions[N_PROJECTILES]{};
+    bool is_projectile_moving[N_PROJECTILES]{};
+    void Shoot();
+    void UpdateProjectiles(float delta_time);
 };

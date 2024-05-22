@@ -66,6 +66,13 @@ void App::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void App::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+    auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        //this_inst->Shoot();
+        std::cout << "shoot!\n";
+        
+        this_inst->audio.Play2DOneShot("sound_shoot");
+    }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         //std::cout << "Right click!\n";
     }

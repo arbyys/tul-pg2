@@ -17,16 +17,16 @@ public:
 	// Sound effects
 	void Play2DOneShot(std::string sound_name);
 	void Play3DOneShot(std::string sound_name, glm::vec3 position);
-	void PlayWalk();
+	void PlayFootstepSound();
+	void PlayBgMusic();
 
 	~Audio();
 private:
 	ISoundEngine* engine = nullptr;
 
-	std::map<std::string, ISoundSource*> sound_list; // Map of sound effects
+	std::map<std::string, ISoundSource*> sound_list;
 
-	//irrklang::ISound* music = nullptr; // Jukebox music
-	//irrklang::ISound* jetpack = nullptr;
+	irrklang::ISound* bg_music = nullptr;
 
 	bool isCharacterRunning = false;
 };
