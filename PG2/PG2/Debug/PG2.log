@@ -1,0 +1,31 @@
+﻿  App.cpp
+  AppCallbacks.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\App.cpp(9,10): error C1083: Nejde otevřít soubor zahrnout: GL/glew.h: No such file or directory
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\Vertex.hpp(3,10): error C1083: Nejde otevřít soubor zahrnout: glm/glm.hpp: No such file or directory
+  (kompilování zdrojového souboru AppCallbacks.cpp)
+  
+D:\VisualStudio\VC\Tools\MSVC\14.39.33519\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+  Audio.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\Audio.hpp(4,10): error C1083: Nejde otevřít soubor zahrnout: glm/glm.hpp: No such file or directory
+  (kompilování zdrojového souboru Audio.cpp)
+  
+  Camera.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\Camera.cpp(3,10): error C1083: Nejde otevřít soubor zahrnout: glm/ext/matrix_transform.hpp: No such file or directory
+  gl_err_callback.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\gl_err_callback.hpp(4,10): error C1083: Nejde otevřít soubor zahrnout: GL/glew.h: No such file or directory
+  (kompilování zdrojového souboru gl_err_callback.cpp)
+  
+  Mesh.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\ShaderProgram.hpp(3,10): error C1083: Nejde otevřít soubor zahrnout: glm/glm.hpp: No such file or directory
+  (kompilování zdrojového souboru Mesh.cpp)
+  
+  Model.cpp
+D:\VisualStudio\VC\Tools\MSVC\14.39.33519\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\Vertex.hpp(3,10): error C1083: Nejde otevřít soubor zahrnout: glm/glm.hpp: No such file or directory
+  (kompilování zdrojového souboru Model.cpp)
+  
+  PG2.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\PG2.cpp(9,10): error C1083: Nejde otevřít soubor zahrnout: GL/glew.h: No such file or directory
+  ShaderProgram.cpp
+C:\Users\Adam\Desktop\skola\tul-pg2\PG2\ShaderProgram.cpp(2,10): error C1083: Nejde otevřít soubor zahrnout: glm/ext.hpp: No such file or directory
+  Generování kódu...

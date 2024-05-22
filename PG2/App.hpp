@@ -5,6 +5,7 @@
 #include "Model.hpp"
 #include "ShaderProgram.hpp"
 #include "Camera.hpp"
+#include "Audio.hpp"
 
 class App {
 public:
@@ -51,4 +52,5 @@ private:
     static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
     ShaderProgram my_shader;
+    Audio audio;
 };
