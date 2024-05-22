@@ -1,11 +1,16 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <string>
 
 //#include "OBJLoader.hpp"
 #include "Model.hpp"
 
+#include "Texture.hpp"
+
+
 #define print(x) std::cout << x << "\n"
+
+Model::Model(){}
 
 Model::Model(const std::filesystem::path& file_name) {
     // load mesh (all meshes) of the model, load material of each mesh, load textures...
@@ -22,7 +27,77 @@ Model::Model(const std::filesystem::path& file_name) {
     meshes.push_back(mesh);
 }
 
-void Model::Draw(const ShaderProgram& shader) {
+Model Model::CreateTerrain() {
+    Model to_return = Model();
+
+    glm::vec3 normalA{};
+    glm::vec3 normalB{};
+    glm::vec3 normal{};
+    unsigned int indices_counter = 0;
+
+    unsigned int map[6][10] = {
+        {20,20,20,20,20,20,20,20,20,20},
+        {20,20,20,20,20,20,20,20,20,20},
+        {20,20,20,20,20,20,20,20,20,20},
+        {20,20,20,20,20,20,20,20,20,20}, 
+        {20,20,20,20,20,20,20,20,20,20},
+        {20,20,20,20,20,20,20,20,20,20},
+    };
+    unsigned int distance_tile = 10;
+    //  ^   3-----2
+    //  |   |    /|
+    //  |   |  /  |
+    //  |   |/    |
+    //  z   0-----1
+    //   x ------->
+    for (unsigned int x = 0; x < sizeof(map)/sizeof(map[0])-1;x++ ){
+        for (unsigned int z = 0; z < sizeof(map[0]) / sizeof(map[0][0])-1; z++) {
+            glm::vec3 p0(x, map[x][z], z);
+            glm::vec3 p1(x + distance_tile, map[x+1][z], z);
+            glm::vec3 p2(x + distance_tile, map[x+1][z+1], z +distance_tile);
+            glm::vec3 p3(x , map[x][z+1], z + distance_tile);
+
+            unsigned int avarangeHeight = (map[x][z] + map[x + 1][z] + map[x + 1][z + 1] + map[x][z + 1]) / 4;
+             //todo textures
+            glm::vec2 tc0 = GetTextureByHeight(avarangeHeight);
+            glm::vec2 tc1 = tc0 + glm::vec2((1.0f / 16), 0.0f);		    
+            glm::vec2 tc2 = tc0 + glm::vec2((1.0f / 16), (1.0f / 16));  
+            glm::vec2 tc3 = tc0 + glm::vec2(0.0f, (1.0f / 16));
+            //normal vectors
+            normalA = glm::normalize(glm::cross(p1 - p0, p2 - p0));
+            normalB = glm::normalize(glm::cross(p2 - p0, p3 - p0));
+
+            to_return.vertices.emplace_back(Vertex{ p0, -normal, tc0 });
+            to_return.vertices.emplace_back(Vertex{ p1, -normal, tc1 });
+            to_return.vertices.emplace_back(Vertex{ p2, -normal, tc2 });
+            to_return.vertices.emplace_back(Vertex{ p3, -normal, tc3 });
+
+            to_return.vertex_indices.emplace_back(indices_counter);
+            to_return.vertex_indices.emplace_back(indices_counter + 2); //todo záleží na pořadí ?
+            to_return.vertex_indices.emplace_back(indices_counter + 1);
+            to_return.vertex_indices.emplace_back(indices_counter);
+            to_return.vertex_indices.emplace_back(indices_counter + 3);
+            to_return.vertex_indices.emplace_back(indices_counter + 2);
+
+            indices_counter += 4;
+
+        }
+    }
+
+    std::filesystem::path texture_path = "./resources/textures/atlas.png";
+    GLuint texture_id = TextureInit(texture_path.string().c_str());
+    Mesh mesh = Mesh(GL_TRIANGLES, to_return.vertices, to_return.vertex_indices, texture_id);
+    to_return.meshes.push_back(mesh);
+    return to_return;
+}
+glm::uvec2 Model::GetTextureByHeight(unsigned int height){
+    if (height > 25) {
+        return glm::uvec2(0.0f, 0.0f);
+    }
+    return glm::uvec2(0.0f + 1.0f / 16, 0.0f);
+}
+
+void Model::Draw(ShaderProgram& shader) {
     // call Draw() on all meshes
     for (auto const& mesh : meshes) {
         mesh.Draw(shader);

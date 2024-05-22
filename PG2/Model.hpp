@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <filesystem>
 
@@ -9,10 +9,12 @@
 class Model
 {
 public:
+    Model();
     Model(const std::filesystem::path& file_name);
-    void Draw(const ShaderProgram& shader);
+    static Model CreateTerrain();
+    void Draw(ShaderProgram& shader);
 private:
-    std::vector<Mesh> meshes;
+    std::vector<Mesh> meshes; //todo nestačí 1 mesh ?
     std::string name;
 
     //GLuint LoadTexture(const std::filesystem::path& file_name);
@@ -22,6 +24,8 @@ private:
     std::vector<Vertex> vertices{};
     std::vector<GLuint> vertex_indices{};
 
+    
+    static glm::uvec2 GetTextureByHeight(unsigned int height);//help for create terrain
     // Reading the file
     std::string file_line;
     std::vector<std::string> file_lines;

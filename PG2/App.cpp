@@ -55,16 +55,14 @@ void App::InitAssets()
     std::filesystem::path FS_path("./resources/shaders/shader.frag");
     my_shader = ShaderProgram(VS_path, FS_path);
 
-    //std::filesystem::path model_path("./resources/objects/bunny_tri_vn.obj");
-    //std::filesystem::path model_path("./resources/objects/bunny_tri_vnt.obj");
-    //std::filesystem::path model_path("./resources/objects/cube_triangles.obj");
-    //std::filesystem::path model_path("./resources/objects/cube_triangles_normals_tex.obj");
-    //std::filesystem::path model_path("./resources/objects/plane_tri_vnt.obj");
-    //std::filesystem::path model_path("./resources/objects/sphere_tri_vnt.obj");
+    //load models
     std::filesystem::path model_path("./resources/objects/chair.obj");
-    Model my_model = Model(model_path);    
+    Model my_model = Model(model_path);
+
+    Model map = Model::CreateTerrain();
     
     scene_lite.push_back(my_model);
+    scene_lite.push_back(map);
 }
 
 // App initialization, if returns true then run run()
@@ -105,14 +103,10 @@ bool App::Init()
         glfwSetCursorPosCallback(window, cursor_position_callback);
         glfwSetScrollCallback(window, scroll_callback);                     // Mousewheel
 
-        // Set V-Sync OFF.
-        //glfwSwapInterval(0);
 
         // Set V-Sync ON.
-        ///*
         glfwSwapInterval(1);
         is_vsync_on = true;
-        /**/
 
         //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -134,8 +128,9 @@ bool App::Init()
 
             std::cout << "GL_DEBUG enabled.\n";
         }
-        else
+        else {
             std::cout << "GL_DEBUG NOT SUPPORTED!\n";
+        }
 
         // set GL params
         /*
@@ -162,7 +157,7 @@ int App::Run(void)
         double fps_counter_seconds = 0;
         int fps_counter_frames = 0;
 
-        UpdateProjectionMatrix();
+        UpdateProjectionMatrix();//updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
         camera.position = glm::vec3(0, 0, 10);
         double last_frame_time = glfwGetTime();
@@ -186,8 +181,7 @@ int App::Run(void)
             last_frame_time = glfwGetTime();
             camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time));
             camera.position += camera_movement;
-            //print(delta_time);
-            //print(camera.position.x << " " << camera.position.y << " " << camera.position.z << " (" << camera_movement.x << " " << camera_movement.y << " " << camera_movement.z << ")");
+            
             glm::mat4 mx_view = camera.GetViewMatrix();
 
             // Set Model Matrix
@@ -252,6 +246,7 @@ App::~App()
     std::cout << "Bye...\n";
 }
 
+//updates mx_projection based on window size
 void App::UpdateProjectionMatrix(void)
 {
     if (window_height < 1) window_height = 1; // avoid division by 0
