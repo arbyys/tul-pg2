@@ -61,7 +61,7 @@ void App::InitAssets()
 
     Model map = Model::CreateTerrain();
     
-    scene_lite.push_back(my_model);
+    //scene_lite.push_back(my_model);
     scene_lite.push_back(map);
 }
 

@@ -35,13 +35,11 @@ Model Model::CreateTerrain() {
     glm::vec3 normal{};
     unsigned int indices_counter = 0;
 
-    unsigned int map[6][10] = {
-        {20,20,20,20,20,20,20,20,20,20},
-        {20,30,30,30,30,30,30,30,30,20},
-        {20,20,20,20,30,30,20,20,20,20},
-        {20,20,20,20,20,20,20,20,20,20}, 
-        {20,20,20,20,20,20,20,20,20,20},
-        {20,20,20,20,20,20,20,20,20,20},
+    unsigned int map[4][4] = {
+        {2,2,2,2},
+        {2,3,3,2},
+        {2,3,3,2},
+        {2,2,2,2}
     };
     unsigned int distance_tile = 10;
     //  ^   3-----2
@@ -53,9 +51,9 @@ Model Model::CreateTerrain() {
     for (unsigned int x = 0; x < sizeof(map)/sizeof(map[0])-1;x++ ){
         for (unsigned int z = 0; z < sizeof(map[0]) / sizeof(map[0][0])-1; z++) {
             glm::vec3 p0(x, map[x][z], z);
-            glm::vec3 p1(x + distance_tile, map[x+1][z], z);
-            glm::vec3 p2(x + distance_tile, map[x+1][z+1], z +distance_tile);
-            glm::vec3 p3(x , map[x][z+1], z + distance_tile);
+            glm::vec3 p1(x + 1, map[x+1][z], z);
+            glm::vec3 p2(x + 1, map[x+1][z+1], z + 1);
+            glm::vec3 p3(x , map[x][z+1], z + 1);
 
             unsigned int avarangeHeight = (map[x][z] + map[x + 1][z] + map[x + 1][z + 1] + map[x][z + 1]) / 4;
              //todo textures
