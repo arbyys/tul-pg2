@@ -172,6 +172,7 @@
     <None Include="resources\basic.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\pg2 lekce\cv08\01 heightmap\heights.png" />
     <Image Include="C:\art\atlas.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

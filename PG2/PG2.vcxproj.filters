@@ -87,5 +87,8 @@
     <Image Include="C:\art\atlas.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\pg2 lekce\cv08\01 heightmap\heights.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

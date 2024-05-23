@@ -34,29 +34,28 @@ Model Model::CreateTerrain() {
     glm::vec3 normalB{};
     glm::vec3 normal{};
     unsigned int indices_counter = 0;
+    
+    cv::Mat map = cv::imread("./resources/heightmap/map.png", cv::IMREAD_GRAYSCALE);
 
-    unsigned int map[4][4] = {
-        {2,2,2,2},
-        {2,3,3,2},
-        {2,3,3,2},
-        {2,2,2,2}
-    };
-    unsigned int distance_tile = 10;
+    unsigned int step_size = 10;
     //  ^   3-----2
     //  |   |    /|
     //  |   |  /  |
     //  |   |/    |
     //  z   0-----1
     //   x ------->
-    for (unsigned int x = 0; x < sizeof(map)/sizeof(map[0])-1;x++ ){
-        for (unsigned int z = 0; z < sizeof(map[0]) / sizeof(map[0][0])-1; z++) {
-            glm::vec3 p0(x, map[x][z], z);
-            glm::vec3 p1(x + 1, map[x+1][z], z);
-            glm::vec3 p2(x + 1, map[x+1][z+1], z + 1);
-            glm::vec3 p3(x , map[x][z+1], z + 1);
+    for (unsigned int x = 0; x < map.cols - step_size;x += step_size ){
+        for (unsigned int z = 0; z < map.rows - step_size; z += step_size) {
+            glm::vec3 p0(x, map.at<uchar>(cv::Point(x,z)), z);
+            glm::vec3 p1(x + step_size, map.at<uchar>(cv::Point(x+step_size,z)), z);
+            glm::vec3 p2(x + step_size, map.at<uchar>(cv::Point(x+ step_size, z+ step_size)), z + step_size);
+            glm::vec3 p3(x , map.at<uchar>(cv::Point(x, z+ step_size)), z + step_size);
 
-            unsigned int avarangeHeight = (map[x][z] + map[x + 1][z] + map[x + 1][z + 1] + map[x][z + 1]) / 4;
-             //todo textures
+            unsigned int avarangeHeight = (map.at<uchar>(cv::Point(x, z))
+                + map.at<uchar>(cv::Point(x+ step_size, z))
+                + map.at<uchar>(cv::Point(x+ step_size, z+ step_size))
+                + map.at<uchar>(cv::Point(x, z+ step_size))) / 4;
+            //todo textures
             glm::vec2 tc0 = GetTextureByHeight(avarangeHeight);
             glm::vec2 tc1 = tc0 + glm::vec2((1.0f / 16), 0.0f);		    
             glm::vec2 tc2 = tc0 + glm::vec2((1.0f / 16), (1.0f / 16));  
