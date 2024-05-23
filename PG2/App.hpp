@@ -7,6 +7,8 @@
 #include "Camera.hpp"
 #include "Audio.hpp"
 
+#define MAP_SCALE 0.4f
+#define MAP_MOVE -200.0f
 #define N_PROJECTILES 10
 
 class App {

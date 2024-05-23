@@ -61,12 +61,18 @@ void App::InitAssets()
 
     //load models
     std::filesystem::path chair_model("./resources/objects/chair.obj");
-    std::filesystem::path chair_texture("./resources/textures/leather.jpg");
+    std::filesystem::path chair_texture("./resources/textures/chair.jpg");
 
-    auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 0.0f, 8.0f), 0.08f, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
     scene_non_transparent.insert(std::make_pair("chair", chair));
 
-    auto map = Model::CreateTerrain(glm::vec3(4.0f, 0.0f, 8.0f), 0.4f, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    //std::filesystem::path table_model("./resources/objects/table.obj");
+    //std::filesystem::path table_texture("./resources/textures/table.png");
+
+    //auto table = new Model(table_model, table_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    //scene_non_transparent.insert(std::make_pair("table", table));
+
+    auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
     scene_non_transparent.insert(std::make_pair("map", map));
 
 
@@ -180,11 +186,11 @@ int App::Run(void)
 
         UpdateProjectionMatrix(); //updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
-        camera.position = glm::vec3(0, 0, 10);
+        camera.position = glm::vec3(1.0f, 2.0f, 1.0f);
         double last_frame_time = glfwGetTime();
         glm::vec3 camera_movement{};
 
-        glm::vec4 my_rgba = { 0.28f, 0.94f, 0.12f, 1.0f };
+        //glm::vec4 my_rgba = { 0.28f, 0.94f, 0.12f, 1.0f };
 
         audio.PlayBgMusic();
 

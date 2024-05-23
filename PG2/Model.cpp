@@ -114,7 +114,7 @@ void Model::Draw(ShaderProgram& shader) {
     // Initial rotation (should be set only once when creating the Model)
     mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
     // Additional rotation
-    mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
+    //mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
 
     // call Draw() on all meshes
     //for (auto const& mesh : meshes) {
