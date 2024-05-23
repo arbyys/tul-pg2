@@ -6,13 +6,19 @@
 
 #define print(x) std::cout << x << "\n"
 
+// pseudo MC spectator mod, po dokonèeí odstranit všechny výskyty:
+#define DEBUG_FLY false
+
 Camera::Camera(glm::vec3 position) : position(position)
 {
     this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    this->world_down = glm::vec3(0.0f, 0.0f, 0.0f);
     // initialization of the camera reference system
     this->UpdateCameraVectors();
 
     is_sprint_toggled = false;
+    jumping = false;
+    falling = false;
 }
 
 glm::mat4 Camera::GetViewMatrix()
@@ -25,27 +31,73 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
     glm::vec3 direction(0,0,0);
     glm::vec3 zero(0,0,0);
 
+    glm::vec3 horizont_front;
+    glm::vec3 horizont_right;
+
+    if (DEBUG_FLY) {
+        horizont_front = front;
+        horizont_right = right;
+    } else {
+        horizont_front = glm::vec3(front.x, 0, front.z);
+        horizont_right = glm::vec3(right.x, 0, right.z);
+    }
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        direction += front;
+        direction += horizont_front;
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        direction += -front;
+        direction += -horizont_front;
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        direction += -right;
+        direction += -horizont_right;
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        direction += right;
+        direction += horizont_right;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !jumping && !falling) {
+        jumping = true;
+    }
+
+
+    // todo lepší gravitace, 7.0 do konstanty (výchozí pozice kamery), doøešit momentum
+    if (jumping) {
+        print(position.y);
+        print(jumpHeight);
+        print("=================");
+        direction += world_up; // tady plus momentum
+        if (position.y >= jumpHeight) {
+            jumping = false;
+            falling = true;
+            momentum = 1;
+        }
+        momentum += 1;
+    } 
+    else if (falling) {
+        print("fallin");
+        direction -= world_up; // tady plus momentum
+        if (position.y <= 7.0f) {
+            jumping = false;
+            falling = false;
+            momentum = 1;
+        }
+        momentum += 1;
     }
 
     if (direction == zero) {
         is_sprint_toggled = false;
     }
 
-    float movement_speed = (is_sprint_toggled) ? movement_speed_sprint : movement_speed_normal;
+
+    float movement_speed;
+    if (DEBUG_FLY) {
+        movement_speed = (is_sprint_toggled) ? movement_speed_sprint*3 : movement_speed_normal*10;
+    } else {
+        movement_speed = (is_sprint_toggled) ? movement_speed_sprint : movement_speed_normal;
+    }
 
     return direction == zero ? zero : glm::normalize(direction) * movement_speed * delta_time;
 }

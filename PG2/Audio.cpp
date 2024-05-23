@@ -7,7 +7,7 @@
 #define VOLUME_BREAK 0.5f
 #define VOLUME_CHAIR 0.7f
 #define VOLUME_LAND 0.5f
-#define VOLUME_MUSIC 0.1f
+#define VOLUME_MUSIC 0.08f
 
 using namespace irrklang;
 
@@ -63,7 +63,7 @@ void Audio::UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec
 
 void Audio::PlayBgMusic()
 {
-	bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(-2, 2, 2), true, false, true);
+	bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(2, 2, 2), true, false, true);
 	if (bg_music) {
 		bg_music->setMinDistance(5.0f);
 		bg_music->setIsPaused(false);
