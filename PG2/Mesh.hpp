@@ -22,7 +22,7 @@ public:
 
     // indirect (indexed) draw 
     Mesh(GLenum primitive_type, std::vector<Vertex>& vertices, std::vector<GLuint>& indices, GLuint texture_id);
-    void Draw(ShaderProgram& shader) const;
+    void Draw(ShaderProgram& shader, glm::mat4 mxModel) const;
     void Clear(void);
 
 private:

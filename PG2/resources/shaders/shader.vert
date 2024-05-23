@@ -1,26 +1,28 @@
 ﻿#version 460 core
 
-in vec3 aPos;   // position: MUST exist
-//in vec3 aColor; // any additional attributes are optional, any data type, etc.
+// [IN] Atributy vertexu;  GPU_memory -> VS
+layout (location = 0) in vec4 aPos;           // pozice vertexu v modelu
+layout (location = 1) in vec3 aNormal;        // normálový vektor vertexu
+layout (location = 2) in vec2 aTextureCoords; // UV souřadnice textury
 
-uniform mat4 uMx_projection = mat4(1.0);
-uniform mat4 uMx_model      = mat4(1.0);
-uniform mat4 uMx_view       = mat4(1.0);
+// [GLOBAL] Matice pro transformace souřadnic vertexů;  Globálně dostupné ve všech shaderech
+uniform mat4 uMxModel;      // matice pro: převod z modelu do herní scény
+uniform mat4 uMxView;       // matice pro: převod z herní scény do kamery
+uniform mat4 uMxProjection; // matice pro: převod z kamery na obrazovku
 
-uniform vec4 uRGBA;
+// [OUT] Atributy vertexu;  VS -> FS
+out vec3 oPos;           // výsledná pozice vertexu
+out vec3 oNormal;        // normálový vektor vertexu
+out vec2 oTextureCoords; // UV souřadnice textury
 
-out vec4 color; // optional output attribute
-
-// VS -> FS
-//out vec3 o_fragment_position; //todo tohle jsem sem pridal ale zatim to neni potreba
-out vec2 o_texture_coordinate //todo tohle je potřeba nevim kde to vzit
 
 void main()
 {
-    //o_fragment_position = vec3(uMx_model * vec4(aPos, 1.0f));//todo later change
-    // Outputs the positions/coordinates of all vertices, MUST WRITE
-    //gl_Position = vec4(aPos, 1.0f);
-    gl_Position = uMx_projection * uMx_view * uMx_model * vec4(aPos, 1.0f);
-    //color = aColor; // copy color to output
-    color = uRGBA;
+    // nastavení OUT proměnných
+    oPos = vec3(uMxModel * aPos); // aplikování Model matice
+    oNormal = mat3(transpose(inverse(uMxModel))) * aNormal; // výpočet normálového vektoru
+    oTextureCoords = aTextureCoords; // přenesení textury beze změny
+
+    // výsledné aplikování všech matic
+    gl_Position = uMxProjection * uMxView * uMxModel * aPos;
 }
