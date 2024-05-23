@@ -54,7 +54,7 @@ void Mesh::Draw(ShaderProgram& shader, glm::mat4 mxModel) const {
         glBindTexture(GL_TEXTURE_2D, texture_id); 
         shader.SetUniform("uMaterial.texture", 0);
     }
-    //shader.SetUniform("uMxModel", mxModel);
+    shader.SetUniform("uMxModel", mxModel);
     
     //???: draw mesh: bind vertex array object, draw all elements with selected primitive type, unbind vertex array object
     glBindVertexArray(VAO);

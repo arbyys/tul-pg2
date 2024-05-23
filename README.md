@@ -26,6 +26,7 @@
 ## Temp poznámky
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
 - implementovat skok
+- přepsat objloader
 
 ## Povinné požadavky [✔ ❌]
 - ✔ 3D GL Core shaders at least 4.5, GL debug
