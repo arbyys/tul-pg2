@@ -10,25 +10,27 @@
 
 #define print(x) std::cout << x << "\n"
 
-Model::Model(){}
+Model::Model(glm::vec3 position, float scale, glm::vec4 rotation):
+    position(position),
+    scale(scale),
+    rotation(rotation)
+{}
 
-Model::Model(const std::filesystem::path& file_name) {
-    // load mesh (all meshes) of the model, load material of each mesh, load textures...
-    //???: call LoadOBJFile, LoadMTLFile, process data, create mesh and set its properties
+Model::Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation) :
+    position(position),
+    scale(scale),
+    rotation(rotation)
+{
 
-    LoadOBJFile(file_name, vertices, vertex_indices);
+    LoadOBJFile(obj_file_path, vertices, vertex_indices);
 
-    /*
-    bool is_loadobj_success = LoadOBJTest(file_name.string().c_str(), vertices, vertex_indices);
-    if (!is_loadobj_success) throw std::exception("OBJ file load err.\n");
-    /**/
-
-    Mesh mesh = Mesh(GL_TRIANGLES, vertices, vertex_indices, 0);
-    meshes.push_back(mesh);
+    GLuint texture_id = TextureInit(texture_file_path.string().c_str());
+    mesh = Mesh(GL_TRIANGLES, vertices, vertex_indices, texture_id);
+    //meshes.push_back(mesh);
 }
 
-Model Model::CreateTerrain() {
-    Model to_return = Model();
+Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation) {
+    Model* to_return = new Model(position, scale, rotation);
 
     glm::vec3 normalA{};
     glm::vec3 normalB{};
@@ -64,17 +66,17 @@ Model Model::CreateTerrain() {
             normalA = glm::normalize(glm::cross(p1 - p0, p2 - p0));
             normalB = glm::normalize(glm::cross(p2 - p0, p3 - p0));
 
-            to_return.vertices.emplace_back(Vertex{ p0, -normal, tc0 });
-            to_return.vertices.emplace_back(Vertex{ p1, -normal, tc1 });
-            to_return.vertices.emplace_back(Vertex{ p2, -normal, tc2 });
-            to_return.vertices.emplace_back(Vertex{ p3, -normal, tc3 });
+            to_return->vertices.emplace_back(Vertex{ p0, -normal, tc0 });
+            to_return->vertices.emplace_back(Vertex{ p1, -normal, tc1 });
+            to_return->vertices.emplace_back(Vertex{ p2, -normal, tc2 });
+            to_return->vertices.emplace_back(Vertex{ p3, -normal, tc3 });
 
-            to_return.vertex_indices.emplace_back(indices_counter);
-            to_return.vertex_indices.emplace_back(indices_counter + 2); //todo záleží na pořadí ?
-            to_return.vertex_indices.emplace_back(indices_counter + 1);
-            to_return.vertex_indices.emplace_back(indices_counter);
-            to_return.vertex_indices.emplace_back(indices_counter + 3);
-            to_return.vertex_indices.emplace_back(indices_counter + 2);
+            to_return->vertex_indices.emplace_back(indices_counter);
+            to_return->vertex_indices.emplace_back(indices_counter + 2); //todo záleží na pořadí ?
+            to_return->vertex_indices.emplace_back(indices_counter + 1);
+            to_return->vertex_indices.emplace_back(indices_counter);
+            to_return->vertex_indices.emplace_back(indices_counter + 3);
+            to_return->vertex_indices.emplace_back(indices_counter + 2);
 
             indices_counter += 4;
 
@@ -83,10 +85,11 @@ Model Model::CreateTerrain() {
 
     std::filesystem::path texture_path = "./resources/textures/atlas.png";
     GLuint texture_id = TextureInit(texture_path.string().c_str());
-    Mesh mesh = Mesh(GL_TRIANGLES, to_return.vertices, to_return.vertex_indices, texture_id);
-    to_return.meshes.push_back(mesh);
+    Mesh mesh = Mesh(GL_TRIANGLES, to_return->vertices, to_return->vertex_indices, texture_id);
+    to_return->mesh = mesh;
     return to_return;
 }
+
 glm::uvec2 Model::GetTextureByHeight(unsigned int height){
     if (height > 25) {
         return glm::uvec2(0.0f, 0.0f);
@@ -95,10 +98,23 @@ glm::uvec2 Model::GetTextureByHeight(unsigned int height){
 }
 
 void Model::Draw(ShaderProgram& shader) {
+
+    // Einheitsmatrix
+    auto mx_model = glm::identity<glm::mat4>();
+    // Move object
+    mx_model = glm::translate(mx_model, position);
+    // Scale object (scale in all three dimensions must be the same in this "engine")
+    mx_model = glm::scale(mx_model, glm::vec3(scale));
+    // Initial rotation (should be set only once when creating the Model)
+    mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
+    // Additional rotation
+    mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
+
     // call Draw() on all meshes
-    for (auto const& mesh : meshes) {
-        mesh.Draw(shader, glm::identity<glm::mat4>());
-    }
+    //for (auto const& mesh : meshes) {
+    //    mesh.Draw(shader, mx_model);
+    //}
+    mesh.Draw(shader, mx_model);
 }
 
 void Model::FillFileLines(const std::filesystem::path& file_name)

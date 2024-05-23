@@ -25,6 +25,7 @@ public:
     void Draw(ShaderProgram& shader, glm::mat4 mxModel) const;
     void Clear(void);
 
+    Mesh() = default;
 private:
     // OpenGL buffer IDs
     // ID = 0 is reserved (i.e. uninitalized)

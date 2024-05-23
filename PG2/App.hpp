@@ -19,7 +19,7 @@ public:
 
     ~App();
 private:
-    std::vector<Model> scene_lite;
+    std::map<std::string, Model*> scene_non_transparent;
 
     static bool is_vsync_on;
     static bool is_fullscreen_on;
