@@ -114,6 +114,7 @@ vec4 getSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 fragToCam)
 
 void main()
 {
+
 	vec3 normal = normalize(oNormal);
 	vec3 fragToCam = normalize(uCameraPos - oPos);
 	vec4 outColor = vec4(0.0f);
@@ -143,4 +144,5 @@ void main()
 	outColor += getAmbientLight();
 
 	result = outColor;
+
 }
