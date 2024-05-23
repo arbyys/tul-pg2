@@ -24,7 +24,7 @@ ShaderProgram::ShaderProgram(const std::filesystem::path& VS_file, const std::fi
 }
 
 void ShaderProgram::Activate(void) {
-	std::cout << "Activating shader ID=" << ID << "\n";
+	//std::cout << "Activating shader ID=" << ID << "\n";
 	glUseProgram(ID);
 }
 

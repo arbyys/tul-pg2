@@ -8,7 +8,7 @@
 
 Camera::Camera(glm::vec3 position) : position(position)
 {
-    //this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
     // initialization of the camera reference system
     this->UpdateCameraVectors();
 
