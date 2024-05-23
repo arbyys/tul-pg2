@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -40,6 +40,7 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation)
     cv::Mat map = cv::imread("./resources/heightmap/map.png", cv::IMREAD_GRAYSCALE);
 
     unsigned int step_size = 10;
+    unsigned int max_height = 0;
     //  ^   3-----2
     //  |   |    /|
     //  |   |  /  |
@@ -57,6 +58,7 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation)
                 + map.at<uchar>(cv::Point(x+ step_size, z))
                 + map.at<uchar>(cv::Point(x+ step_size, z+ step_size))
                 + map.at<uchar>(cv::Point(x, z+ step_size))) / 4;
+            if (avarangeHeight > max_height) { max_height = avarangeHeight; }
             //todo textures
             glm::vec2 tc0 = GetTextureByHeight(avarangeHeight);
             glm::vec2 tc1 = tc0 + glm::vec2((1.0f / 16), 0.0f);		    
@@ -90,11 +92,15 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation)
     return to_return;
 }
 
-glm::uvec2 Model::GetTextureByHeight(unsigned int height){
-    if (height > 25) {
-        return glm::uvec2(0.0f, 0.0f);
+glm::vec2 Model::GetTextureByHeight(unsigned int height){
+    if (height < 90) {
+        return glm::vec2(0.0f, 0.0f);
     }
-    return glm::uvec2(0.0f + 1.0f / 16, 0.0f);
+    if (height < 170) {
+        return glm::vec2(1.0f / 16, 0.0f);
+    }
+    return glm::vec2(2.0f / 16, 0.0f);
+    
 }
 
 void Model::Draw(ShaderProgram& shader) {
