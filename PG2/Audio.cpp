@@ -7,6 +7,7 @@
 #define VOLUME_BREAK 0.5f
 #define VOLUME_CHAIR 0.7f
 #define VOLUME_LAND 0.5f
+#define VOLUME_MUSIC 0.1f
 
 using namespace irrklang;
 
@@ -40,6 +41,10 @@ Audio::Audio()
 
 	ISoundSource* sound_chair = engine->addSoundSourceFromFile("resources/sounds/chair_move.wav");
 	sound_list.insert({ "sound_chair", sound_chair });
+
+	ISoundSource* sound_shoot = engine->addSoundSourceFromFile("resources/sounds/shoot.wav");
+	sound_shoot->setDefaultVolume(0.20f);
+	sound_list.insert({ "sound_shoot", sound_shoot });
 }
 
 void Audio::UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec3 world_up)
@@ -56,6 +61,22 @@ void Audio::UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec
 	engine->setListenerPosition(_position, _look_direction, _vel_per_second, _up_vector);
 }
 
+void Audio::PlayBgMusic()
+{
+	bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(-2, 2, 2), true, false, true);
+	if (bg_music) {
+		bg_music->setMinDistance(5.0f);
+		bg_music->setIsPaused(false);
+		bg_music->setVolume(VOLUME_MUSIC);
+	}
+}
+
+void Audio::PlayFootstepSound()
+{
+	engine->play2D(sound_list[isCharacterRunning ? "sound_run" : "sound_walk"]);
+	isCharacterRunning = !isCharacterRunning;
+}
+
 void Audio::Play2DOneShot(std::string sound_name)
 {
 	engine->play2D(sound_list[sound_name]);
@@ -67,23 +88,12 @@ void Audio::Play3DOneShot(std::string sound_name, glm::vec3 position)
 	engine->play3D(sound_list[sound_name], _position);
 }
 
-void Audio::PlayWalk()
-{
-	engine->play2D(sound_list[isCharacterRunning ? "sound_run" : "sound_walk"]);
-	isCharacterRunning = !isCharacterRunning;
-}
-
 Audio::~Audio()
 {
-	/*if (music) {
-		music->stop();
-		music->drop();
+	if (bg_music) {
+		bg_music->stop();
+		bg_music->drop();
 	}
-	if (jetpack) {
-		jetpack->stop();
-		jetpack->drop();
-	}
-	*/
 	if (engine) {
 		engine->drop();
 	}

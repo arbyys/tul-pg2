@@ -41,14 +41,6 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
         direction += right;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        direction += up;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        direction += -up;
-    }
-
     if (direction == zero) {
         is_sprint_toggled = false;
     }

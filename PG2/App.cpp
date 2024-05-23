@@ -50,6 +50,10 @@ App::App()
 
 void App::InitAssets()
 {
+    glm::vec3 position{};
+    float scale{};
+    glm::vec4 rotation{};
+
     // load models, load textures, load shaders, initialize level, etc...
     std::filesystem::path VS_path("./resources/shaders/shader.vert");
     std::filesystem::path FS_path("./resources/shaders/shader.frag");
@@ -58,11 +62,26 @@ void App::InitAssets()
     //load models
     std::filesystem::path model_path("./resources/objects/chair.obj");
     Model my_model = Model(model_path);
-
     Model map = Model::CreateTerrain();
     
-    //scene_lite.push_back(my_model);
     scene_lite.push_back(map);
+    scene_lite.push_back(my_model);
+
+
+    // projectiles
+
+    /*
+    std::filesystem::path model_path2("./resources/objects/sphere.obj");
+    print("Loading projectiles:");
+    position = glm::vec3(0.0f, -10.0f, 0.0f); // Hidden
+    scale = 0.05f;
+    rotation = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    for (int i = 0; i < N_PROJECTILES; i++) {
+        auto name = "obj_projectile_" + std::to_string(i);
+        auto obj_projectile_x = new Model(model_path2);
+        projectiles[i] = obj_projectile_x;
+    }
+    */
 }
 
 // App initialization, if returns true then run run()
@@ -157,13 +176,15 @@ int App::Run(void)
         double fps_counter_seconds = 0;
         int fps_counter_frames = 0;
 
-        UpdateProjectionMatrix();//updates mx_projection based on window size
+        UpdateProjectionMatrix(); //updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
         camera.position = glm::vec3(0, 0, 10);
         double last_frame_time = glfwGetTime();
         glm::vec3 camera_movement{};
 
         glm::vec4 my_rgba = { 0.28f, 0.94f, 0.12f, 1.0f };
+
+        audio.PlayBgMusic();
 
         while (!glfwWindowShouldClose(window))
         {
@@ -186,14 +207,24 @@ int App::Run(void)
 
             // Set Model Matrix
             glm::mat4 mx_model = glm::identity<glm::mat4>();
-            //mx_model = glm::rotate(mx_model, glm::radians(static_cast<float>(90 * glfwGetTime())), glm::vec3(0.0f, 0.0f, 1.0f));
 
             // Activate shader, set uniform vars
             my_shader.Activate();
-            my_shader.SetUniform("uRGBA", my_rgba);
-            my_shader.SetUniform("uMx_projection", mx_projection);
-            my_shader.SetUniform("uMx_model", mx_model);
-            my_shader.SetUniform("uMx_view", mx_view);
+
+            my_shader.SetUniform("uMxProjection", mx_projection);
+            my_shader.SetUniform("uMxModel", mx_model);
+            my_shader.SetUniform("uMxView", mx_view);
+
+            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.9f)); // change val
+            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
+            my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, etc.
+
+            // point light todo
+
+            // spot light todo
+
+            // dir light todo
+
 
             // Draw the scene
             for (auto& model : scene_lite) {

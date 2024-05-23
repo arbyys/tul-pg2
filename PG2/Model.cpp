@@ -97,7 +97,7 @@ glm::uvec2 Model::GetTextureByHeight(unsigned int height){
 void Model::Draw(ShaderProgram& shader) {
     // call Draw() on all meshes
     for (auto const& mesh : meshes) {
-        mesh.Draw(shader);
+        mesh.Draw(shader, glm::identity<glm::mat4>());
     }
 }
 
@@ -237,10 +237,4 @@ void Model::LoadOBJFile(const std::filesystem::path& file_name, std::vector<Vert
 
     // Print done
     print("LoadOBJFile: Loaded OBJ file " << file_name);
-}
-
-void Model::LoadMTLFile(const std::filesystem::path& file_name)
-{
-    FillFileLines(file_name);
-    //TODO: Model::LoadMTLFile
 }
