@@ -25,7 +25,7 @@ private:
     std::vector<GLuint> vertex_indices{};
 
     
-    static glm::uvec2 GetTextureByHeight(unsigned int height);//help for create terrain
+    static glm::vec2 GetTextureByHeight(unsigned int height);//help for create terrain
     // Reading the file
     std::string file_line;
     std::vector<std::string> file_lines;

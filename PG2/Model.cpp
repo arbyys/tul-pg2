@@ -27,8 +27,8 @@ Model::Model(const std::filesystem::path& file_name) {
     meshes.push_back(mesh);
 }
 
-Model Model::CreateTerrain() {
-    Model to_return = Model();
+Model* Model::CreateTerrain() {
+    Model* to_return = new Model();
 
     glm::vec3 normalA{};
     glm::vec3 normalB{};
@@ -38,6 +38,7 @@ Model Model::CreateTerrain() {
     cv::Mat map = cv::imread("./resources/heightmap/map.png", cv::IMREAD_GRAYSCALE);
 
     unsigned int step_size = 10;
+    unsigned int max_height = 0;
     //  ^   3-----2
     //  |   |    /|
     //  |   |  /  |
@@ -55,6 +56,7 @@ Model Model::CreateTerrain() {
                 + map.at<uchar>(cv::Point(x+ step_size, z))
                 + map.at<uchar>(cv::Point(x+ step_size, z+ step_size))
                 + map.at<uchar>(cv::Point(x, z+ step_size))) / 4;
+            if (avarangeHeight > max_height) { max_height = avarangeHeight; }
             //todo textures
             glm::vec2 tc0 = GetTextureByHeight(avarangeHeight);
             glm::vec2 tc1 = tc0 + glm::vec2((1.0f / 16), 0.0f);		    
@@ -64,17 +66,17 @@ Model Model::CreateTerrain() {
             normalA = glm::normalize(glm::cross(p1 - p0, p2 - p0));
             normalB = glm::normalize(glm::cross(p2 - p0, p3 - p0));
 
-            to_return.vertices.emplace_back(Vertex{ p0, -normal, tc0 });
-            to_return.vertices.emplace_back(Vertex{ p1, -normal, tc1 });
-            to_return.vertices.emplace_back(Vertex{ p2, -normal, tc2 });
-            to_return.vertices.emplace_back(Vertex{ p3, -normal, tc3 });
+            to_return->vertices.emplace_back(Vertex{ p0, -normal, tc0 });
+            to_return->vertices.emplace_back(Vertex{ p1, -normal, tc1 });
+            to_return->vertices.emplace_back(Vertex{ p2, -normal, tc2 });
+            to_return->vertices.emplace_back(Vertex{ p3, -normal, tc3 });
 
-            to_return.vertex_indices.emplace_back(indices_counter);
-            to_return.vertex_indices.emplace_back(indices_counter + 2); //todo záleží na pořadí ?
-            to_return.vertex_indices.emplace_back(indices_counter + 1);
-            to_return.vertex_indices.emplace_back(indices_counter);
-            to_return.vertex_indices.emplace_back(indices_counter + 3);
-            to_return.vertex_indices.emplace_back(indices_counter + 2);
+            to_return->vertex_indices.emplace_back(indices_counter);
+            to_return->vertex_indices.emplace_back(indices_counter + 2); //todo záleží na pořadí ?
+            to_return->vertex_indices.emplace_back(indices_counter + 1);
+            to_return->vertex_indices.emplace_back(indices_counter);
+            to_return->vertex_indices.emplace_back(indices_counter + 3);
+            to_return->vertex_indices.emplace_back(indices_counter + 2);
 
             indices_counter += 4;
 
@@ -83,15 +85,19 @@ Model Model::CreateTerrain() {
 
     std::filesystem::path texture_path = "./resources/textures/atlas.png";
     GLuint texture_id = TextureInit(texture_path.string().c_str());
-    Mesh mesh = Mesh(GL_TRIANGLES, to_return.vertices, to_return.vertex_indices, texture_id);
-    to_return.meshes.push_back(mesh);
+    Mesh mesh = Mesh(GL_TRIANGLES, to_return->vertices, to_return->vertex_indices, texture_id);
+    to_return->meshes.push_back(mesh);
     return to_return;
 }
-glm::uvec2 Model::GetTextureByHeight(unsigned int height){
-    if (height > 25) {
-        return glm::uvec2(0.0f, 0.0f);
+glm::vec2 Model::GetTextureByHeight(unsigned int height){
+    if (height < 90) {
+        return glm::vec2(0.0f, 0.0f);
     }
-    return glm::uvec2(0.0f + 1.0f / 16, 0.0f);
+    if (height < 170) {
+        return glm::vec2(1.0f / 16, 0.0f);
+    }
+    return glm::vec2(2.0f / 16, 0.0f);
+    
 }
 
 void Model::Draw(ShaderProgram& shader) {
