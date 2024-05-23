@@ -60,12 +60,14 @@ void App::InitAssets()
     my_shader = ShaderProgram(VS_path, FS_path);
 
     //load models
-    std::filesystem::path model_path("./resources/objects/chair.obj");
-    Model my_model = Model(model_path);
-    Model map = Model::CreateTerrain();
-    
-    scene_lite.push_back(map);
-    scene_lite.push_back(my_model);
+    std::filesystem::path chair_model("./resources/objects/chair.obj");
+    std::filesystem::path chair_texture("./resources/textures/leather.jpg");
+
+    auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 0.0f, 8.0f), 0.08f, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    scene_non_transparent.insert(std::make_pair("chair", chair));
+
+    auto map = Model::CreateTerrain(glm::vec3(4.0f, 0.0f, 8.0f), 0.4f, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    scene_non_transparent.insert(std::make_pair("map", map));
 
 
     // projectiles
@@ -212,12 +214,12 @@ int App::Run(void)
             my_shader.Activate();
 
             my_shader.SetUniform("uMxProjection", mx_projection);
-            my_shader.SetUniform("uMxModel", mx_model);
+            //my_shader.SetUniform("uMxModel", mx_model);
             my_shader.SetUniform("uMxView", mx_view);
 
             my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.9f)); // change val
-            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
-            my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, etc.
+            //my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
+            //my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, other lights as well
 
             // point light todo
 
@@ -226,9 +228,9 @@ int App::Run(void)
             // dir light todo
 
 
-            // Draw the scene
-            for (auto& model : scene_lite) {
-                model.Draw(my_shader);
+            // Draw non transparent scene
+            for (auto& [key, value] : scene_non_transparent) {
+                value->Draw(my_shader);
             }
 
             // End of frame

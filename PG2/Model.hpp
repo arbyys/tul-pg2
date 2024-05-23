@@ -9,13 +9,18 @@
 class Model
 {
 public:
-    Model();
-    Model(const std::filesystem::path& file_name);
-    static Model CreateTerrain();
+    Model(glm::vec3 position, float scale, glm::vec4 rotation);
+    Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation);
+    static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation);
     void Draw(ShaderProgram& shader);
 private:
-    std::vector<Mesh> meshes; //todo nestačí 1 mesh ?
+    Mesh mesh;
+    //std::vector<Mesh> meshes;
     std::string name;
+
+    glm::vec3 position{};
+    float scale{};
+    glm::vec4 rotation;
 
     //GLuint LoadTexture(const std::filesystem::path& file_name);
     //...
@@ -31,5 +36,4 @@ private:
     std::vector<std::string> file_lines;
     void FillFileLines(const std::filesystem::path& file_name);
     void LoadOBJFile(const std::filesystem::path& file_name, std::vector<Vertex>& out_vertices, std::vector<GLuint>& out_vertex_indices);
-    void LoadMTLFile(const std::filesystem::path& file_name);
 };
