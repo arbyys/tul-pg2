@@ -2,6 +2,8 @@
 
 #include "App.hpp"
 
+#define print(x) std::cout << x << "\n"
+
 float App::GetMapY(float x, float z) {
     //  ^   3-----2
     //  |   |    /|

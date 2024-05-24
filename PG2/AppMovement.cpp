@@ -1,11 +1,12 @@
-#include <iostream>
+﻿#include <iostream>
 
 #include "App.hpp"
+#define print(x) std::cout << x << "\n"
 
 void App::PlayerMovement(float delta_time) {
     camera_movement = camera.ProcessInput(window, delta_time);
     camera.position += camera_movement;
-    // todo lep�� gravitace, 7.0 do konstanty (v�choz� pozice kamery), do�e�it momentum
+    // todo lepší gravitace, 7.0 do konstanty (výchozí pozice kamery), doøešit momentum
     if (camera.IsJumping()) {
         camera.position += world_up * Jump_speedUP * delta_time; // tady plus momentum
         if (camera.last_jump_time + Jump_time < glfwGetTime()) {
@@ -61,6 +62,54 @@ void App::ChairMovement(float delta_time) {
     scene_non_transparent["chair"]->position.y = minPosition;
 
 }
-void App::ProjectileMovement(float delta_time){
+void App::Shoot(){
+    projectiles[projectile_id]->position = camera.position;
+    projectile_directions[projectile_id] = camera.front;
+    is_projectile_moving[projectile_id] = true;
 
+    projectile_id = (projectile_id + 1) % N_PROJECTILES;
+}
+void App::ProjectileMovement(float delta_time){
+    for (int i = 0; i < N_PROJECTILES; i++) {
+        if (!is_projectile_moving[i]) { continue; }
+        auto& position = projectiles[i]->position;
+        position += projectile_directions[i] * projectile_speed * delta_time;
+        //kolize s modeli
+        for (Model* collision : collisions) {
+            if(IsCollision(position,collision))
+            {
+                position = glm::vec3(0, -10, 0);
+                //todo zvuk nárazu
+                is_projectile_moving[i] = false;
+
+                if (collision->id == 'c') { Teleport_chair(); }
+            }
+        }
+        //kolize se zemí
+        float groundY = GetMapY(position.x, position.z);
+        if (position.y < groundY) {
+            is_projectile_moving[i] = false;
+            position.y = groundY;
+            //todo zvuk nárazu do země
+        }
+    }
+}
+
+bool App::IsCollision(glm::vec3 bullet,Model* model)
+{
+    //kvádr
+    return bullet.x <= model->position.x + model->collision_max.x &&
+        bullet.x >= model->position.x + model->collision_min.x &&
+        bullet.y <= model->position.y + model->collision_max.y &&
+        bullet.y >= model->position.y + model->collision_min.x &&
+        bullet.z <= model->position.z + model->collision_max.z &&
+        bullet.z >= model->position.z + model->collision_min.x;
+}
+void App::Teleport_chair(){
+    print("teleport");
+    unsigned int x = (unsigned int)(abs(Chair_max_X) + abs(Chair_min_X));
+    unsigned int z = (unsigned int)(abs(Chair_max_Z) + abs(Chair_min_Z));
+    scene_non_transparent["chair"]->position = glm::vec3(rand() % x - abs(Chair_min_X), -1 ,rand() % z - abs(Chair_min_Z));
+
+    //todo zvuk teleportu
 }

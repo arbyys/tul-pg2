@@ -17,6 +17,10 @@ public:
     void Draw(ShaderProgram& shader);
 
     glm::vec3 position{};
+
+    char id = 'u';
+    glm::vec3 collision_min{};
+    glm::vec3 collision_max{};
 private:
     Mesh mesh;
     //std::vector<Mesh> meshes;

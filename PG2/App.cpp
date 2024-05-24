@@ -1,4 +1,4 @@
-// Basic includes
+ï»¿// Basic includes
 #include <iostream>
 #include <chrono>
 #include <stack>
@@ -69,9 +69,13 @@ void App::InitAssets()
     std::filesystem::path chair_texture("./resources/textures/chair.jpg");
     auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
     scene_non_transparent.insert(std::make_pair("chair", chair));
+    collisions.push_back(chair);
+    chair->collision_max = glm::vec3(2,10.4f,2);
+    chair->collision_min = glm::vec3(-2,-1,-2);
+    chair->id = 'c';
 
     std::filesystem::path glass_model("./resources/objects/wineglass.obj");
-    // todo - udìlat sklenièku transparentní
+    // todo - udÃ¬lat skleniÃ¨ku transparentnÃ­
     //std::filesystem::path glass_texture("./resources/textures/glass.png");
     float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
     for (int i = 0; i < N_GLASSES; ++i) {
@@ -84,7 +88,7 @@ void App::InitAssets()
     auto table = new Model(table_model, table_texture, glm::vec3(-75.0f, 1.0f, 8.0f), 3.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
     scene_non_transparent.insert(std::make_pair("table", table));
 
-    // doøešit texturu lampy
+    // doÃ¸eÅ¡it texturu lampy
     // https://www.turbosquid.com/3d-models/3d-street-lamp-2210777
     std::filesystem::path lamp_model("./resources/objects/lamp.obj");
     std::filesystem::path lamp_texture("./resources/textures/lamp.png");
@@ -96,19 +100,13 @@ void App::InitAssets()
 
 
     // projectiles
-
-    /*
-    std::filesystem::path model_path2("./resources/objects/sphere.obj");
-    print("Loading projectiles:");
-    position = glm::vec3(0.0f, -10.0f, 0.0f); // Hidden
-    scale = 0.05f;
-    rotation = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    std::filesystem::path model_bullet_path("./resources/objects/sphere.obj");
+    std::filesystem::path bullet_texture("./resources/textures/red.png");
     for (int i = 0; i < N_PROJECTILES; i++) {
-        auto name = "obj_projectile_" + std::to_string(i);
-        auto obj_projectile_x = new Model(model_path2);
+        auto obj_projectile_x = new Model(model_bullet_path,bullet_texture, glm::vec3(0.0f, -10.0f, 0.0f),PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
         projectiles[i] = obj_projectile_x;
     }
-    */
+    
 }
 
 // App initialization, if returns true then run run()
@@ -251,7 +249,9 @@ int App::Run(void)
             last_frame_time = glfwGetTime();
 
             PlayerMovement(delta_time);
+            ProjectileMovement(delta_time); //App::Teleport_chair vyÅ¾aduje aby tato metoda byla pÅ™ed ChairMovement -> jinak 1 frame v zemi
             ChairMovement(delta_time);
+           
 
             glm::mat4 mx_view = camera.GetViewMatrix();
 
@@ -279,6 +279,9 @@ int App::Run(void)
             // Draw non transparent scene
             for (auto& [key, value] : scene_non_transparent) {
                 value->Draw(my_shader);
+            }
+            for (auto& projectile : projectiles) {
+                projectile->Draw(my_shader);
             }
 
             // draw crosshair
