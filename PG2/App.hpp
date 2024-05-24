@@ -12,11 +12,11 @@
 #define N_GLASSES 3
 
 #define PlayerHeight 10.0f //how high is player above terrain
-#define Jump_speedUP 15.0f // multiplayer for jump
-#define Jump_speedDown 30.0f //multiplayer for falling
-#define Jump_time 1 // how long can player jump in seconds
+#define Jump_speedUP 25.0f // multiplayer for jump
+#define Jump_speedDown 35.0f //multiplayer for falling
+#define Jump_time 0.3 // how long can player jump in seconds
 
-#define Walk_auidio_delay 2 //how often play walk audio in seconds
+#define WALK_AUDIO_DELAY 1 //how often play walk audio in seconds
 
 //chair
 #define Chair_speed 20.0f

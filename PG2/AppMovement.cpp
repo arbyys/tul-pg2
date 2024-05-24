@@ -23,20 +23,19 @@ void App::PlayerMovement(float delta_time) {
         if (camera.Isfalling() || camera.IsJumping())
         {
             camera.OnLand();
-            //todo play land music
+            audio.Play2DOneShot("sound_land");
         }
     }
-    if (camera_movement.x > 0 || camera_movement.z > 0)
+    if ((camera_movement.x > 0 || camera_movement.z > 0) && !camera.Isfalling() && !camera.IsJumping())
     {
-        if (audio_walk_last_time + Walk_auidio_delay < glfwGetTime()) {
-            if (camera.IsSprinting()) {
-                //todo play sprinting audio
-            }
-            else {
-                //todo play walking audio
-            }
+        if (audio_walk_last_time + WALK_AUDIO_DELAY < glfwGetTime()) {
+            audio.PlayFootstepSound(camera.IsSprinting());
             audio_walk_last_time = glfwGetTime();
         }
+    }
+    else
+    {
+        audio.StopFootstepSound();
     }
 
     glm::vec3 debugposition = camera.position; //only for debug todo delete this
