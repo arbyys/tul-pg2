@@ -26,10 +26,16 @@ public:
 
     Camera(glm::vec3 position);
     glm::mat4 GetViewMatrix();
-    glm::vec3 ProcessInput(GLFWwindow* window, GLfloat deltaTime, Audio& audio);
+    glm::vec3 ProcessInput(GLFWwindow* window, GLfloat deltaTime);
     void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
 
     void ToggleSprint();
+    void OnLand();
+    void StopJump();
+    bool IsJumping();
+    bool Isfalling();
+    bool IsSprinting();
+    double last_jump_time;
 private:
     glm::vec3 world_up;
     glm::vec3 world_down;

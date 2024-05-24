@@ -26,7 +26,7 @@ glm::mat4 Camera::GetViewMatrix()
     return glm::lookAt(this->position, this->position + this->front, this->up);
 }
 
-glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time, Audio& audio)
+glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
 {
     glm::vec3 direction(0,0,0);
     glm::vec3 zero(0,0,0);
@@ -60,29 +60,9 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time, Audio& au
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !jumping && !falling) {
         jumping = true;
+        last_jump_time = glfwGetTime();
     }
 
-
-    // todo lepší gravitace, 7.0 do konstanty (výchozí pozice kamery), doøešit momentum
-    if (jumping) {
-        direction += world_up; // tady plus momentum
-        if (position.y >= jumpHeight) {
-            jumping = false;
-            falling = true;
-            momentum = 1;
-        }
-        momentum += 1;
-    } 
-    else if (falling) {
-        direction -= world_up; // tady plus momentum
-        if (position.y <= 7.0f) {
-            jumping = false;
-            falling = false;
-            momentum = 1;
-            audio.Play2DOneShot("sound_land");
-        }
-        momentum += 1;
-    }
 
     if (direction == zero) {
         is_sprint_toggled = false;
@@ -130,4 +110,27 @@ void Camera::UpdateCameraVectors()
 void Camera::ToggleSprint()
 {
     is_sprint_toggled = !is_sprint_toggled;
+}
+
+void Camera::OnLand()
+{
+    jumping = false;
+    falling = false;
+}
+
+void Camera::StopJump() {
+    jumping = false;
+    falling = true;
+}
+
+bool Camera::IsJumping()
+{
+    return jumping;
+}
+bool Camera::Isfalling()
+{
+    return falling;
+}
+bool Camera::IsSprinting() {
+    return is_sprint_toggled;
 }
