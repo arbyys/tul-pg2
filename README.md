@@ -28,24 +28,24 @@
 
 ## Temp poznámky
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
-- implementovat skok s lepší gravitací
 - přepsat objloader
 - okomentovat opengl metody
+- opravit židli rotaci
 
-## Povinné požadavky [✔ ❌]
+## Povinné požadavky
 - ✔ 3D GL Core shaders at least 4.5, GL debug
 - ✔ high perforce => at least 60 FPS
 - ✔ allow VSyncntrol, fullscreen vs. windowed switching (restore window position & size)
 - ✔ event proceng (camera, object, app behaviour...): mouse (both axes, wheel), keyboard
 - ✔ multiple dirent independently moving 3D models, at leats two loaded from file
 - ✔ at least th different textures (or subtextures from texture atlas etc.)
-- ✔ lighting model, at least 3 lights (ambient+directional+reflector: at least one is moving; + possible other lights)
-- ✔ correct full scale transparency (at least one transparent object; NOT if(alpha<0.1) {discard;} )
+- ❌ lighting model, at least 3 lights (ambient+directional+reflector: at least one is moving; + possible other lights)
+- ❌ correct full scale transparency (at least one transparent object; NOT if(alpha<0.1) {discard;} )
 
 
 ## Rozšiřující požadavky
-- ❌ height map textured by height & proper player height coords
-- ❌ working collisions (only projectiles x environment)
+- ✔ height map textured by height & proper player height coords
+- ✔ working collisions (only projectiles x environment)
 - ❌ particles
-- ❌ scripting (useful)
-- ❌ audio (better than just background)
+- ✔ scripting (useful)
+- ✔ audio (better than just background)
