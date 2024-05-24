@@ -67,17 +67,31 @@ void App::InitAssets()
     //load models
     std::filesystem::path chair_model("./resources/objects/chair.obj");
     std::filesystem::path chair_texture("./resources/textures/chair.jpg");
-
     auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
     scene_non_transparent.insert(std::make_pair("chair", chair));
 
+    std::filesystem::path glass_model("./resources/objects/wineglass.obj");
+    // todo - udìlat sklenièku transparentní
+    //std::filesystem::path glass_texture("./resources/textures/glass.png");
+    float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
+    for (int i = 0; i < N_GLASSES; ++i) {
+        auto glass = new Model(glass_model, chair_texture, glm::vec3(-75.0f, 6.0f, 8.0f+offsets[i]), 0.0025f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+        scene_non_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
+    }
+
     std::filesystem::path table_model("./resources/objects/table.obj");
     std::filesystem::path table_texture("./resources/textures/table.png");
-
-    auto table = new Model(table_model, table_texture, glm::vec3(4.0f, 1.0f, 8.0f), 3.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    auto table = new Model(table_model, table_texture, glm::vec3(-75.0f, 1.0f, 8.0f), 3.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
     scene_non_transparent.insert(std::make_pair("table", table));
 
-    auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),&heights);
+    // doøešit texturu lampy
+    // https://www.turbosquid.com/3d-models/3d-street-lamp-2210777
+    std::filesystem::path lamp_model("./resources/objects/lamp.obj");
+    std::filesystem::path lamp_texture("./resources/textures/lamp.png");
+    auto lamp = new Model(lamp_model, lamp_texture, glm::vec3(-80.0f, 1.0f, 9.0f), 4.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    scene_non_transparent.insert(std::make_pair("lamp", lamp));
+
+    auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), &heights);
     scene_non_transparent.insert(std::make_pair("map", map));
 
 

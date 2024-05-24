@@ -9,7 +9,7 @@
 
 #define MAP_SCALE 0.4f
 #define MAP_MOVE -200.0f
-#define N_PROJECTILES 3
+#define N_GLASSES 3
 
 #define PlayerHeight 10.0f //how high is player above terrain
 #define Jump_speedUP 15.0f // multiplayer for jump
@@ -27,9 +27,9 @@
 #define ChairHeight 1.0f
 #define Change_chair_direction 3
 
-//prijectile
+//projectile
 #define projectile_speed 3.0f
-
+#define N_PROJECTILES 3
 
 class App {
 public:
