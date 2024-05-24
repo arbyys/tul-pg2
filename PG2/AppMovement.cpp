@@ -61,3 +61,6 @@ void App::ChairMovement(float delta_time) {
     scene_non_transparent["chair"]->position.y = minPosition;
 
 }
+void App::ProjectileMovement(float delta_time){
+
+}

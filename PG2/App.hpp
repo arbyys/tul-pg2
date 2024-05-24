@@ -9,7 +9,7 @@
 
 #define MAP_SCALE 0.4f
 #define MAP_MOVE -200.0f
-#define N_PROJECTILES 10
+#define N_PROJECTILES 3
 
 #define PlayerHeight 10.0f //how high is player above terrain
 #define Jump_speedUP 15.0f // multiplayer for jump
@@ -26,6 +26,9 @@
 #define Chair_min_Z -100.0f
 #define ChairHeight 1.0f
 #define Change_chair_direction 3
+
+//prijectile
+#define projectile_speed 3.0f
 
 
 class App {
@@ -92,11 +95,8 @@ private:
     glm::vec3 chair_direction{};
 
     // projectiles
-    const float projectile_speed = 20.0f;
-    int projectile_n = 0;                   // Currently used projectile
     Model* projectiles[N_PROJECTILES]{};    // Pool of projectiles
     glm::vec3 projectile_directions[N_PROJECTILES]{};
     bool is_projectile_moving[N_PROJECTILES]{};
-    void Shoot();
-    void UpdateProjectiles(float delta_time);
+    void ProjectileMovement(float delta_time);
 };

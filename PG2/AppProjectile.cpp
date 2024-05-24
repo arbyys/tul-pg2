@@ -5,6 +5,7 @@
 
 #define print(x) //std::cout << x << "\n"
 
+//todo delete
 /*
 void App::Shoot()
 {
