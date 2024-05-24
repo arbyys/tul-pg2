@@ -1,17 +1,19 @@
 ﻿#pragma once
 
 #include <filesystem>
+#include <map>
 
 #include "Vertex.hpp"
 #include "Mesh.hpp"
 #include "ShaderProgram.hpp"
+#include "Texture.hpp"
 
 class Model
 {
 public:
     Model(glm::vec3 position, float scale, glm::vec4 rotation);
     Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation);
-    static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation);
+    static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation, std::map<std::pair<unsigned int, unsigned int>, unsigned int>* heights);
     void Draw(ShaderProgram& shader);
 private:
     Mesh mesh;
