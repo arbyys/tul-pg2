@@ -11,6 +11,23 @@
 #define MAP_MOVE -200.0f
 #define N_PROJECTILES 10
 
+#define PlayerHeight 10.0f //how high is player above terrain
+#define Jump_speedUP 15.0f // multiplayer for jump
+#define Jump_speedDown 30.0f //multiplayer for falling
+#define Jump_time 1 // how long can player jump in seconds
+
+#define Walk_auidio_delay 2 //how often play walk audio in seconds
+
+//chair
+#define Chair_speed 20.0f
+#define Chair_max_X 80.0f
+#define Chair_min_X -110.0f
+#define Chair_max_Z 80.0f
+#define Chair_min_Z -100.0f
+#define ChairHeight 1.0f
+#define Change_chair_direction 3
+
+
 class App {
 public:
     App();
@@ -64,6 +81,15 @@ private:
     Audio audio;
     //colision
     std::map<std::pair<unsigned int, unsigned int>, unsigned int> heights;
+    float GetMapY(float x, float z);
+    glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    double audio_walk_last_time = 0; // last time a walking audio was played
+    void PlayerMovement(float deltatime);
+    glm::vec3 camera_movement{};
+    //chair
+    void ChairMovement(float delta_time);
+    float Last_chair_direction = 0;
+    glm::vec3 chair_direction{};
 
     // projectiles
     const float projectile_speed = 20.0f;

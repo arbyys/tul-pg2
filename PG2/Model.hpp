@@ -15,12 +15,13 @@ public:
     Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation);
     static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation, std::map<std::pair<unsigned int, unsigned int>, unsigned int>* heights);
     void Draw(ShaderProgram& shader);
+
+    glm::vec3 position{};
 private:
     Mesh mesh;
     //std::vector<Mesh> meshes;
     std::string name;
 
-    glm::vec3 position{};
     float scale{};
     glm::vec4 rotation;
 

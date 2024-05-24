@@ -214,7 +214,7 @@ int App::Run(void)
         glViewport(0, 0, window_width, window_height);
         camera.position = glm::vec3(1.0f, 7.0f, 1.0f);
         double last_frame_time = glfwGetTime();
-        glm::vec3 camera_movement{};
+        
 
         //glm::vec4 my_rgba = { 0.28f, 0.94f, 0.12f, 1.0f };
 
@@ -231,12 +231,14 @@ int App::Run(void)
 
             // After clearing the canvas:
 
+
             // React to user ;; Create View Matrix according to camera settings
-            double delta_time = glfwGetTime() - last_frame_time;
+            float delta_time = glfwGetTime() - last_frame_time;
             last_frame_time = glfwGetTime();
-            camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time), audio);
-            camera.position += camera_movement;
-            
+
+            PlayerMovement(delta_time);
+            ChairMovement(delta_time);
+
             glm::mat4 mx_view = camera.GetViewMatrix();
 
             // Set Model Matrix

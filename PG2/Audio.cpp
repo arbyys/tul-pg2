@@ -71,7 +71,7 @@ void Audio::PlayBgMusic()
 	}
 }
 
-void Audio::PlayFootstepSound()
+void Audio::PlayFootstepSound() //remove logic here => move into app
 {
 	engine->play2D(sound_list[isCharacterRunning ? "sound_run" : "sound_walk"]);
 	isCharacterRunning = !isCharacterRunning;
