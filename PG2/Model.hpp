@@ -19,7 +19,12 @@ public:
     float camera_distance;
 
     glm::vec3 position{};
+
+    char id = 'u';
+    glm::vec3 collision_min{};
+    glm::vec3 collision_max{};
     glm::vec4 rotation = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+
 private:
     Mesh mesh;
     //std::vector<Mesh> meshes;

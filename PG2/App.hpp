@@ -27,8 +27,9 @@
 #define Change_chair_direction 3
 
 //projectile
-#define projectile_speed 3.0f
+#define projectile_speed 25.0f
 #define N_PROJECTILES 3
+#define PROJECTILE_SCALE 0.3f
 
 class App {
 public:
@@ -92,16 +93,23 @@ private:
     double audio_walk_last_time = 0; // last time a walking audio was played
     void PlayerMovement(float deltatime);
     glm::vec3 camera_movement{};
+    std::vector<Model*> collisions;
+
     //chair
     void ChairMovement(float delta_time);
     float Last_chair_direction = 0;
     glm::vec3 chair_direction{};
+
+    void Teleport_chair();
     float chair_speed = 10.0f;
     glm::vec4 chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, 80.0f);
 
     // projectiles
-    Model* projectiles[N_PROJECTILES]{};    // Pool of projectiles
+    Model* projectiles[N_PROJECTILES]{}; // Pool of projectiles
     glm::vec3 projectile_directions[N_PROJECTILES]{};
     bool is_projectile_moving[N_PROJECTILES]{};
+    unsigned int projectile_id = 0;
     void ProjectileMovement(float delta_time);
+    void Shoot();
+    bool IsCollision(glm::vec3 bullet, Model* model);
 };
