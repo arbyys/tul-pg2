@@ -12,6 +12,8 @@
 
 #include "ShaderProgram.hpp"
 
+#define print(x) std::cout << x << "\n"
+
 ShaderProgram::ShaderProgram(const std::filesystem::path& VS_file, const std::filesystem::path& FS_file)
 {
 	std::vector<GLuint> shader_ids;
@@ -122,6 +124,7 @@ GLuint ShaderProgram::CompileShader(const std::filesystem::path& source_file, co
 	GLuint shader_h = glCreateShader(type);
 	
 	//const char* shader_string = TextFileRead(source_file).c_str(); // Dangling pointer, does not work
+	
 	std::string str = TextFileRead(source_file);
 	const char* shader_string = str.c_str();
 
@@ -159,9 +162,17 @@ GLuint ShaderProgram::LinkShader(const std::vector<GLuint> shader_ids)
 }
 
 std::string ShaderProgram::TextFileRead(const std::filesystem::path& fn) {
-	std::ifstream file(fn);
+	std::ifstream file(fn, std::ios::binary);
 	if (!file.is_open())
 		throw std::exception("Error opening file.\n");
+
+	// pokud soubor obsahuje BOM, je pøeskoèen
+	char bom[3] = { 0 };
+	file.read(bom, 3);
+	if (bom[0] != '\xEF' || bom[1] != '\xBB' || bom[2] != '\xBF') {
+		file.seekg(0);
+	}
+
 	std::stringstream ss;
 	ss << file.rdbuf();
 	return ss.str();

@@ -2,9 +2,13 @@
 
 // 99 = dočasné vypnutí světel, poté nastavit na odpovídající hodnotu a odstranit v main()
 
-#define MAX_DIRECTIONAL_LIGHTS 99  // slunce
-#define MAX_SPOT_LIGHTS 99         // lampa vedle stolu 
-#define MAX_POINT_LIGHTS 99        // židle
+// slunce
+#define MAX_DIRECTIONAL_LIGHTS 99
+// lampa vedle stolu 
+#define MAX_SPOT_LIGHTS 99
+// židle
+#define MAX_POINT_LIGHTS 99
+
 
 // [IN] Atributy vertexu;  VS -> FS
 in vec3 oPos;
