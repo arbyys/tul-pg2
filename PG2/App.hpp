@@ -25,6 +25,7 @@ private:
 
     static bool is_vsync_on;
     static bool is_fullscreen_on;
+    static bool is_crosshair_toggled;
     
     static GLFWmonitor* monitor;
     static const GLFWvidmode* mode;
@@ -41,6 +42,9 @@ private:
     static double last_cursor_xpos;
     static double last_cursor_ypos;
 
+    unsigned int VAO;
+    unsigned int VBO;
+
     GLFWwindow* window = nullptr;
     glm::vec4 clear_color = glm::vec4(0, 0, 0, 0);
 
@@ -56,6 +60,7 @@ private:
     static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
     ShaderProgram my_shader;
+    ShaderProgram crosshair_shader;
     Audio audio;
 
     // projectiles
