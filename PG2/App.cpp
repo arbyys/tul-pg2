@@ -28,6 +28,7 @@
 
 bool App::is_vsync_on = false;
 bool App::is_fullscreen_on = false;
+bool App::is_crosshair_toggled = true;
 GLFWmonitor* App::monitor;
 const GLFWvidmode* App::mode;
 int App::window_xcor{};
@@ -59,6 +60,10 @@ void App::InitAssets()
     std::filesystem::path FS_path("./resources/shaders/shader.frag");
     my_shader = ShaderProgram(VS_path, FS_path);
 
+    std::filesystem::path crosshair_VS_path("./resources/shaders/crosshair.vert");
+    std::filesystem::path crosshair_FS_path("./resources/shaders/crosshair.frag");
+    crosshair_shader = ShaderProgram(crosshair_VS_path, crosshair_FS_path);
+
     //load models
     std::filesystem::path chair_model("./resources/objects/chair.obj");
     std::filesystem::path chair_texture("./resources/textures/chair.jpg");
@@ -66,11 +71,11 @@ void App::InitAssets()
     auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
     scene_non_transparent.insert(std::make_pair("chair", chair));
 
-    //std::filesystem::path table_model("./resources/objects/table.obj");
-    //std::filesystem::path table_texture("./resources/textures/table.png");
+    std::filesystem::path table_model("./resources/objects/table.obj");
+    std::filesystem::path table_texture("./resources/textures/table.png");
 
-    //auto table = new Model(table_model, table_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-    //scene_non_transparent.insert(std::make_pair("table", table));
+    auto table = new Model(table_model, table_texture, glm::vec3(4.0f, 1.0f, 8.0f), 3.0f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    scene_non_transparent.insert(std::make_pair("table", table));
 
     auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),&heights);
     scene_non_transparent.insert(std::make_pair("map", map));
@@ -184,9 +189,30 @@ int App::Run(void)
         double fps_counter_seconds = 0;
         int fps_counter_frames = 0;
 
+        // init crosshair
+        glGenVertexArrays(1, &VAO);
+        glBindVertexArray(VAO);
+        
+        glGenBuffers(1, &VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+        float crosshairVertices[] = {
+            -0.013f,  0.0f,  0.0f,
+             0.013f,  0.0f,  0.0f,
+              0.0f, -0.013f,  0.0f,
+              0.0f,  0.013f,  0.0f,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(crosshairVertices), crosshairVertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Unbind
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
         UpdateProjectionMatrix(); //updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
-        camera.position = glm::vec3(1.0f, 2.0f, 1.0f);
+        camera.position = glm::vec3(1.0f, 7.0f, 1.0f);
         double last_frame_time = glfwGetTime();
         glm::vec3 camera_movement{};
 
@@ -208,7 +234,7 @@ int App::Run(void)
             // React to user ;; Create View Matrix according to camera settings
             double delta_time = glfwGetTime() - last_frame_time;
             last_frame_time = glfwGetTime();
-            camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time));
+            camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time), audio);
             camera.position += camera_movement;
             
             glm::mat4 mx_view = camera.GetViewMatrix();
@@ -238,6 +264,17 @@ int App::Run(void)
             for (auto& [key, value] : scene_non_transparent) {
                 value->Draw(my_shader);
             }
+
+            // draw crosshair
+
+            if (is_crosshair_toggled) {
+                crosshair_shader.Activate();
+                glBindVertexArray(VAO);
+                glLineWidth(2.0f);
+                glDrawArrays(GL_LINES, 0, 4);
+                glBindVertexArray(0);
+            }
+
 
             // End of frame
             // Swap front and back buffers

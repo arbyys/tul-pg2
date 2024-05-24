@@ -7,7 +7,7 @@
 #define VOLUME_BREAK 0.5f
 #define VOLUME_CHAIR 0.7f
 #define VOLUME_LAND 0.5f
-#define VOLUME_MUSIC 0.1f
+#define VOLUME_MUSIC 0.08f
 
 using namespace irrklang;
 
@@ -33,7 +33,7 @@ Audio::Audio()
 	sound_list.insert({ "sound_teleport", sound_teleport });
 
 	ISoundSource* sound_land = engine->addSoundSourceFromFile("resources/sounds/jump_land.wav");
-	sound_land->setDefaultVolume(0.45f);
+	sound_land->setDefaultVolume(0.35f);
 	sound_list.insert({ "sound_land", sound_land });
 
 	ISoundSource* sound_glass = engine->addSoundSourceFromFile("resources/sounds/glass_break.wav");
@@ -63,7 +63,7 @@ void Audio::UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec
 
 void Audio::PlayBgMusic()
 {
-	bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(-2, 2, 2), true, false, true);
+	bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(2, 2, 2), true, false, true);
 	if (bg_music) {
 		bg_music->setMinDistance(5.0f);
 		bg_music->setIsPaused(false);

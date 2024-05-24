@@ -17,14 +17,13 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 // implementovat pauzu mouse-looku
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
                 break;
+            case GLFW_KEY_Q:
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                break;
             case GLFW_KEY_LEFT_CONTROL:
                 camera.ToggleSprint();
                 break;
-            case GLFW_KEY_SPACE:
-                // skok
-                break;
             case GLFW_KEY_F:
-                // fullscreen už hotovo?
                 is_fullscreen_on = !is_fullscreen_on;
                 if (is_fullscreen_on) {
                     glfwGetWindowPos(window, &window_xcor, &window_ycor);
@@ -37,30 +36,25 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 }
                 break;
             case GLFW_KEY_V:
-                // vsync odstranit zvuk, už hotovo?
+                // vsync odstranit zvuk teleportu
                 this_inst->audio.Play2DOneShot("sound_teleport");
                 is_vsync_on = !is_vsync_on;
                 glfwSwapInterval(is_vsync_on);
                 std::cout << "VSync: " << is_vsync_on << "\n";
                 break;
+            case GLFW_KEY_C:
+                is_crosshair_toggled = !is_crosshair_toggled;
+                break;
             case GLFW_KEY_R:
                 // reset sklenièek
-                break;
-            case GLFW_KEY_KP_SUBTRACT:
-                // minus fov
-                break;
-            case GLFW_KEY_KP_ADD:
-                // plus fov
                 break;
         }
     }
 }
 
 void App::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    // fov udìlat víc smooth a pøedìlat na plus a minus
-
     auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
-    this_inst->FOV += 10.0f * static_cast<float>(yoffset);
+    this_inst->FOV += 4.5f * static_cast<float>(yoffset);
     this_inst->FOV = std::clamp(this_inst->FOV, 20.0f, 170.0f); // limit FOV to reasonable values...
     this_inst->UpdateProjectionMatrix();
 }
@@ -92,6 +86,11 @@ void App::mouse_button_callback(GLFWwindow* window, int button, int action, int 
     }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         //std::cout << "Right click!\n";
+    }
+    if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
+        auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
+        this_inst->FOV = 89.0f;
+        this_inst->UpdateProjectionMatrix();
     }
 }
 

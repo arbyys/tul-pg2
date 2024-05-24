@@ -16,16 +16,19 @@
 	- `WSAD`: pohyb
 	- `LMB`: výstřel
 	- `Space`: skok
-	- `LCtrl`: sprint (držení)
-	- `ESC`: ovládání kamery myší (toggle)
+	- `LCtrl`: sprint
+	- `ESC`: vypnutí ovládání kamery pomocí myši
 	- `F`: fullscreen
 	- `V`: ovládání vsync
 	- `R`: obnova rozbitých skleniček
-	- `+` / `-`: změna FOV
+	- `C`: ovládání zobrazení crosshairu
+	- `SCROLL`: změna FOV
+	- `MMB`: reset FOV na základní hodnotu
+	- `Q`: vypnutí aplikace
 
 ## Temp poznámky
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
-- implementovat skok
+- implementovat skok s lepší gravitací
 - přepsat objloader
 
 ## Povinné požadavky [✔ ❌]
