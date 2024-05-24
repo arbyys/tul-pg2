@@ -35,6 +35,7 @@ public:
     bool IsJumping();
     bool Isfalling();
     bool IsSprinting();
+    void UpdateListenerPosition(Audio& audio);
     double last_jump_time;
 private:
     glm::vec3 world_up;

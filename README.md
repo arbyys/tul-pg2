@@ -30,6 +30,7 @@
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
 - implementovat skok s lepší gravitací
 - přepsat objloader
+- okomentovat opengl metody
 
 ## Povinné požadavky [✔ ❌]
 - ✔ 3D GL Core shaders at least 4.5, GL debug

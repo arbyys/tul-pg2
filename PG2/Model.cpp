@@ -10,16 +10,16 @@
 
 #define print(x) std::cout << x << "\n"
 
-Model::Model(glm::vec3 position, float scale, glm::vec4 rotation):
+Model::Model(glm::vec3 position, float scale, glm::vec4 initial_rotation):
     position(position),
     scale(scale),
-    rotation(rotation)
+    initial_rotation(initial_rotation)
 {}
 
-Model::Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation) :
+Model::Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 initial_rotation) :
     position(position),
     scale(scale),
-    rotation(rotation)
+    initial_rotation(initial_rotation)
 {
 
     LoadOBJFile(obj_file_path, vertices, vertex_indices);
@@ -117,6 +117,10 @@ glm::vec2 Model::GetTextureByHeight(unsigned int height){
     
 }
 
+void Model::Rotate(glm::vec4 rotation) {
+
+}
+
 void Model::Draw(ShaderProgram& shader) {
 
     // Einheitsmatrix
@@ -126,9 +130,9 @@ void Model::Draw(ShaderProgram& shader) {
     // Scale object (scale in all three dimensions must be the same in this "engine")
     mx_model = glm::scale(mx_model, glm::vec3(scale));
     // Initial rotation (should be set only once when creating the Model)
-    mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
+    mx_model = glm::rotate(mx_model, glm::radians(initial_rotation.w), glm::vec3(initial_rotation.x, initial_rotation.y, initial_rotation.z));
     // Additional rotation
-    //mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
+    mx_model = glm::rotate(mx_model, glm::radians(rotation.w), glm::vec3(rotation.x, rotation.y, rotation.z));
 
     // call Draw() on all meshes
     //for (auto const& mesh : meshes) {

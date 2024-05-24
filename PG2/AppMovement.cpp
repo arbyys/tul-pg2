@@ -24,20 +24,19 @@ void App::PlayerMovement(float delta_time) {
         if (camera.Isfalling() || camera.IsJumping())
         {
             camera.OnLand();
-            //todo play land music
+            audio.Play2DOneShot("sound_land");
         }
     }
-    if (camera_movement.x > 0 || camera_movement.z > 0)
+    if ((camera_movement.x > 0 || camera_movement.z > 0) && !camera.Isfalling() && !camera.IsJumping())
     {
-        if (audio_walk_last_time + Walk_auidio_delay < glfwGetTime()) {
-            if (camera.IsSprinting()) {
-                //todo play sprinting audio
-            }
-            else {
-                //todo play walking audio
-            }
+        if (audio_walk_last_time + WALK_AUDIO_DELAY < glfwGetTime()) {
+            audio.PlayFootstepSound(camera.IsSprinting());
             audio_walk_last_time = glfwGetTime();
         }
+    }
+    else
+    {
+        audio.StopFootstepSound();
     }
 
     glm::vec3 debugposition = camera.position; //only for debug todo delete this
@@ -47,8 +46,14 @@ void App::ChairMovement(float delta_time) {
     if (Last_chair_direction + Change_chair_direction < glfwGetTime()) {
         chair_direction = glm::vec3((float)rand() / RAND_MAX - 0.5f, 0, (float)rand() / RAND_MAX - 0.5f);
         Last_chair_direction = glfwGetTime();
+        chair_speed = 20.0f + static_cast<float>(rand()) / RAND_MAX * (80.0f - 20.0f); // random chair speed
+
+        float random_angle = 30.0f + static_cast<float>(rand()) / RAND_MAX * (450.0f - 30.0f);
+
+        chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, random_angle);
     }
-    scene_non_transparent["chair"]->position += chair_direction * delta_time * Chair_speed;
+    scene_non_transparent["chair"]->position += chair_direction * delta_time * chair_speed;
+    scene_non_transparent["chair"]->rotation += chair_rotation * delta_time;
     if (scene_non_transparent["chair"]->position.x > Chair_max_X) 
     { scene_non_transparent["chair"]->position.x = Chair_max_X; }
     else if (scene_non_transparent["chair"]->position.x < Chair_min_X) 
