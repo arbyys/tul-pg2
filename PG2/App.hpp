@@ -10,6 +10,7 @@
 #define MAP_SCALE 0.4f
 #define MAP_MOVE -200.0f
 #define N_PROJECTILES 10
+#define N_GLASSES 3
 
 class App {
 public:
