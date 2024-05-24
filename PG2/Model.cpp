@@ -36,6 +36,7 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation)
     glm::vec3 normalB{};
     glm::vec3 normal{};
     unsigned int indices_counter = 0;
+    std::map<std::pair<float, float>, float>* heights{};
     
     cv::Mat map = cv::imread("./resources/heightmap/map.png", cv::IMREAD_GRAYSCALE);
 
@@ -82,8 +83,18 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation)
 
             indices_counter += 4;
 
+            //height for collision detection
+            
+            heights[{x, z}] = map.at<uchar>(cv::Point(x, z));
+
         }
     }
+    //height for collision 
+    unsigned int remainderx = map.cols % step_size;
+    unsigned int remaindery = map.rows % step_size;
+    heights[{ map.cols - remainderx - step_size, map.rows - remaindery}] = map.at<uchar>(cv::Point(map.cols - remainderx - step_size, map.rows - remaindery));
+    heights[{ map.cols - remainderx ,map.rows - remaindery}] = map.at<uchar>(cv::Point(map.cols - remainderx, map.rows - remaindery));
+    heights[{ map.cols - remainderx, map.rows - remaindery - step_size}] = map.at<uchar>(cv::Point(map.cols - remainderx, map.rows - remaindery - step_size));
 
     std::filesystem::path texture_path = "./resources/textures/atlas.png";
     GLuint texture_id = TextureInit(texture_path.string().c_str());
