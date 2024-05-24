@@ -19,6 +19,7 @@ public:
 	void Play3DOneShot(std::string sound_name, glm::vec3 position);
 	void PlayFootstepSound(bool runningNotWalking);
 	void StopFootstepSound();
+	void UpdateChairPosition(glm::vec3 position);
 	void PlayBgMusic();
 
 	~Audio();
@@ -30,6 +31,7 @@ private:
 	irrklang::ISound* bg_music = nullptr;
 	irrklang::ISound* walking_sound = nullptr;
 	irrklang::ISound* running_sound = nullptr;
+	irrklang::ISound* chair_sound = nullptr;
 	
 	bool footstepSoundPlaying = false;
 };

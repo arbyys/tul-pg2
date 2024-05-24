@@ -45,8 +45,14 @@ void App::ChairMovement(float delta_time) {
     if (Last_chair_direction + Change_chair_direction < glfwGetTime()) {
         chair_direction = glm::vec3((float)rand() / RAND_MAX - 0.5f, 0, (float)rand() / RAND_MAX - 0.5f);
         Last_chair_direction = glfwGetTime();
+        chair_speed = 20.0f + static_cast<float>(rand()) / RAND_MAX * (80.0f - 20.0f); // random chair speed
+
+        float random_angle = 30.0f + static_cast<float>(rand()) / RAND_MAX * (450.0f - 30.0f);
+
+        chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, random_angle);
     }
-    scene_non_transparent["chair"]->position += chair_direction * delta_time * Chair_speed;
+    scene_non_transparent["chair"]->position += chair_direction * delta_time * chair_speed;
+    scene_non_transparent["chair"]->rotation += chair_rotation * delta_time;
     if (scene_non_transparent["chair"]->position.x > Chair_max_X) 
     { scene_non_transparent["chair"]->position.x = Chair_max_X; }
     else if (scene_non_transparent["chair"]->position.x < Chair_min_X) 
