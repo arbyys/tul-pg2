@@ -68,12 +68,12 @@ void App::InitAssets()
     std::filesystem::path chair_model("./resources/objects/chair.obj");
     std::filesystem::path chair_texture("./resources/textures/chair.jpg");
 
-    auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
-    scene_non_transparent.insert(std::make_pair("chair", chair));
-    collisions.push_back(chair);
-    chair->collision_max = glm::vec3(2,10.4f,2);
-    chair->collision_min = glm::vec3(-2,-1,-2);
-    chair->id = 'c';
+    chair_object = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
+    scene_non_transparent.insert(std::make_pair("chair", chair_object));
+    collisions.push_back(chair_object);
+    chair_object->collision_max = glm::vec3(2,10.4f,2);
+    chair_object->collision_min = glm::vec3(-2,-1,-2);
+    chair_object->id = 'c';
   
     std::filesystem::path glass_model("./resources/objects/wineglass.obj");
     std::filesystem::path glass_texture("./resources/textures/glass.png");
