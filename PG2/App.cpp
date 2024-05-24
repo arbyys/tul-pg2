@@ -67,16 +67,15 @@ void App::InitAssets()
     //load models
     std::filesystem::path chair_model("./resources/objects/chair.obj");
     std::filesystem::path chair_texture("./resources/textures/chair.jpg");
-    auto chair = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
-    scene_non_transparent.insert(std::make_pair("chair", chair));
+    chair_object = new Model(chair_model, chair_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.08f, glm::vec4(1.0f, 0.0f, 0.0f, -90.0f));
+    scene_non_transparent.insert(std::make_pair("chair", chair_object));
 
     std::filesystem::path glass_model("./resources/objects/wineglass.obj");
-    // todo - udìlat sklenièku transparentní
-    //std::filesystem::path glass_texture("./resources/textures/glass.png");
+    std::filesystem::path glass_texture("./resources/textures/glass.png");
     float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
     for (int i = 0; i < N_GLASSES; ++i) {
-        auto glass = new Model(glass_model, chair_texture, glm::vec3(-75.0f, 6.0f, 8.0f+offsets[i]), 0.0025f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-        scene_non_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
+        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.0f, 8.0f+offsets[i]), 0.0025f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+        scene_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
     }
 
     std::filesystem::path table_model("./resources/objects/table.obj");
@@ -94,6 +93,9 @@ void App::InitAssets()
     auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), &heights);
     scene_non_transparent.insert(std::make_pair("map", map));
 
+    for (auto i = scene_transparent.begin(); i != scene_transparent.end(); i++) {
+        scene_transparent_pairs.push_back(&*i);
+    }
 
     // projectiles
 
@@ -186,6 +188,19 @@ bool App::Init()
         /**/
         glEnable(GL_DEPTH_TEST);
         // first init OpenGL, THAN init assets: valid context MUST exist
+
+        //glEnable(GL_LINE_SMOOTH);
+        //glEnable(GL_POLYGON_SMOOTH);
+
+        //glEnable(GL_CULL_FACE);
+
+        // Transparency blending function
+        
+
+        // todo - opravit blending
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
         InitAssets();
     }
     catch (std::exception const& e) {
@@ -258,6 +273,9 @@ int App::Run(void)
             // Set Model Matrix
             glm::mat4 mx_model = glm::identity<glm::mat4>();
 
+            camera.UpdateListenerPosition(audio);
+            audio.UpdateChairPosition(chair_object->position);
+
             // Activate shader, set uniform vars
             my_shader.Activate();
 
@@ -280,6 +298,27 @@ int App::Run(void)
             for (auto& [key, value] : scene_non_transparent) {
                 value->Draw(my_shader);
             }
+
+            // draw transparent scene
+            glEnable(GL_BLEND);         // enable blending
+            glDisable(GL_CULL_FACE);    // no polygon removal
+            glDepthMask(GL_FALSE);      // set Z to read-only
+
+            for (auto& transparent_pair : scene_transparent_pairs) {
+                transparent_pair->second->camera_distance = glm::length(camera.position - transparent_pair->second->position);
+            }
+
+            std::sort(scene_transparent_pairs.begin(), scene_transparent_pairs.end(), [](std::pair<const std::string, Model*>*& a, std::pair<const std::string, Model*>*& b) {
+                return a->second->camera_distance > b->second->camera_distance;
+            });
+
+            for (auto& transparent_pair : scene_transparent_pairs) {
+                transparent_pair->second->Draw(my_shader);
+            }
+            glDisable(GL_BLEND);
+            glEnable(GL_CULL_FACE);
+            glDepthMask(GL_TRUE);
+
 
             // draw crosshair
 

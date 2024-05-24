@@ -134,3 +134,8 @@ bool Camera::Isfalling()
 bool Camera::IsSprinting() {
     return is_sprint_toggled;
 }
+
+void Camera::UpdateListenerPosition(Audio& audio)
+{
+    audio.UpdateListenerPosition(position, front, world_up);
+}

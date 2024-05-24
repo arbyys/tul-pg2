@@ -12,14 +12,13 @@
 #define N_GLASSES 3
 
 #define PlayerHeight 10.0f //how high is player above terrain
-#define Jump_speedUP 15.0f // multiplayer for jump
-#define Jump_speedDown 30.0f //multiplayer for falling
-#define Jump_time 1 // how long can player jump in seconds
+#define Jump_speedUP 25.0f // multiplayer for jump
+#define Jump_speedDown 35.0f //multiplayer for falling
+#define Jump_time 0.3 // how long can player jump in seconds
 
-#define Walk_auidio_delay 2 //how often play walk audio in seconds
+#define WALK_AUDIO_DELAY 1 //how often play walk audio in seconds
 
 //chair
-#define Chair_speed 20.0f
 #define Chair_max_X 80.0f
 #define Chair_min_X -110.0f
 #define Chair_max_Z 80.0f
@@ -42,6 +41,8 @@ public:
     ~App();
 private:
     std::map<std::string, Model*> scene_non_transparent;
+    std::map<std::string, Model*> scene_transparent;
+    std::vector<std::pair<const std::string, Model*>*> scene_transparent_pairs;
 
     static bool is_vsync_on;
     static bool is_fullscreen_on;
@@ -55,6 +56,8 @@ private:
     static int window_height;
     static int window_width_return_from_fullscreen;
     static int window_height_return_from_fullscreen;
+
+    Model* chair_object{};
 
     float FOV = 89.0f;
     glm::mat4 mx_projection = glm::identity<glm::mat4>();
@@ -93,6 +96,8 @@ private:
     void ChairMovement(float delta_time);
     float Last_chair_direction = 0;
     glm::vec3 chair_direction{};
+    float chair_speed = 10.0f;
+    glm::vec4 chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, 80.0f);
 
     // projectiles
     Model* projectiles[N_PROJECTILES]{};    // Pool of projectiles
