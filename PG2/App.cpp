@@ -234,7 +234,7 @@ int App::Run(void)
             // React to user ;; Create View Matrix according to camera settings
             double delta_time = glfwGetTime() - last_frame_time;
             last_frame_time = glfwGetTime();
-            camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time));
+            camera_movement = camera.ProcessInput(window, static_cast<float>(delta_time), audio);
             camera.position += camera_movement;
             
             glm::mat4 mx_view = camera.GetViewMatrix();

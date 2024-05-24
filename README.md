@@ -21,12 +21,14 @@
 	- `F`: fullscreen
 	- `V`: ovládání vsync
 	- `R`: obnova rozbitých skleniček
+	- `C`: ovládání zobrazení crosshairu
 	- `SCROLL`: změna FOV
 	- `MMB`: reset FOV na základní hodnotu
+	- `Q`: vypnutí aplikace
 
 ## Temp poznámky
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
-- implementovat skok
+- implementovat skok s lepší gravitací
 - přepsat objloader
 
 ## Povinné požadavky [✔ ❌]

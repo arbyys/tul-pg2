@@ -17,14 +17,13 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 // implementovat pauzu mouse-looku
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
                 break;
+            case GLFW_KEY_Q:
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                break;
             case GLFW_KEY_LEFT_CONTROL:
                 camera.ToggleSprint();
                 break;
-            case GLFW_KEY_SPACE:
-                // skok
-                break;
             case GLFW_KEY_F:
-                // fullscreen už hotovo?
                 is_fullscreen_on = !is_fullscreen_on;
                 if (is_fullscreen_on) {
                     glfwGetWindowPos(window, &window_xcor, &window_ycor);

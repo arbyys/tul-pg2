@@ -33,7 +33,7 @@ Audio::Audio()
 	sound_list.insert({ "sound_teleport", sound_teleport });
 
 	ISoundSource* sound_land = engine->addSoundSourceFromFile("resources/sounds/jump_land.wav");
-	sound_land->setDefaultVolume(0.45f);
+	sound_land->setDefaultVolume(0.35f);
 	sound_list.insert({ "sound_land", sound_land });
 
 	ISoundSource* sound_glass = engine->addSoundSourceFromFile("resources/sounds/glass_break.wav");

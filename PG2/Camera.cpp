@@ -26,7 +26,7 @@ glm::mat4 Camera::GetViewMatrix()
     return glm::lookAt(this->position, this->position + this->front, this->up);
 }
 
-glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
+glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time, Audio& audio)
 {
     glm::vec3 direction(0,0,0);
     glm::vec3 zero(0,0,0);
@@ -65,9 +65,6 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
 
     // todo lepší gravitace, 7.0 do konstanty (výchozí pozice kamery), doøešit momentum
     if (jumping) {
-        print(position.y);
-        print(jumpHeight);
-        print("=================");
         direction += world_up; // tady plus momentum
         if (position.y >= jumpHeight) {
             jumping = false;
@@ -77,12 +74,12 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
         momentum += 1;
     } 
     else if (falling) {
-        print("fallin");
         direction -= world_up; // tady plus momentum
         if (position.y <= 7.0f) {
             jumping = false;
             falling = false;
             momentum = 1;
+            audio.Play2DOneShot("sound_land");
         }
         momentum += 1;
     }

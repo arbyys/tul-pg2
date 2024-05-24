@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "Audio.hpp"
+
 class Camera
 {
 public:
@@ -24,7 +26,7 @@ public:
 
     Camera(glm::vec3 position);
     glm::mat4 GetViewMatrix();
-    glm::vec3 ProcessInput(GLFWwindow* window, GLfloat deltaTime);
+    glm::vec3 ProcessInput(GLFWwindow* window, GLfloat deltaTime, Audio& audio);
     void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
 
     void ToggleSprint();
