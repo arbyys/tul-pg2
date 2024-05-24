@@ -16,12 +16,13 @@
 	- `WSAD`: pohyb
 	- `LMB`: výstřel
 	- `Space`: skok
-	- `LCtrl`: sprint (držení)
-	- `ESC`: ovládání kamery myší (toggle)
+	- `LCtrl`: sprint
+	- `ESC`: vypnutí ovládání kamery pomocí myši
 	- `F`: fullscreen
 	- `V`: ovládání vsync
 	- `R`: obnova rozbitých skleniček
-	- `+` / `-`: změna FOV
+	- `SCROLL`: změna FOV
+	- `MMB`: reset FOV na základní hodnotu
 
 ## Temp poznámky
 - domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
