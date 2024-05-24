@@ -57,6 +57,8 @@ private:
 
     ShaderProgram my_shader;
     Audio audio;
+    //colision
+    std::map<std::pair<unsigned int, unsigned int>, unsigned int> heights;
 
     // projectiles
     const float projectile_speed = 20.0f;

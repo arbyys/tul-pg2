@@ -72,7 +72,7 @@ void App::InitAssets()
     //auto table = new Model(table_model, table_texture, glm::vec3(4.0f, 1.0f, 8.0f), 0.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
     //scene_non_transparent.insert(std::make_pair("table", table));
 
-    auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),&heights);
     scene_non_transparent.insert(std::make_pair("map", map));
 
 
