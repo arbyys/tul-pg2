@@ -80,7 +80,7 @@ void App::InitAssets()
 
     float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
     for (int i = 0; i < N_GLASSES; ++i) {
-        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.0f, 8.0f+offsets[i]), 0.0025f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.5f, 8.0f+offsets[i]), 0.0035f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
         scene_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
     }
 
@@ -285,16 +285,21 @@ int App::Run(void)
             //my_shader.SetUniform("uMxModel", mx_model);
             my_shader.SetUniform("uMxView", mx_view);
 
+            my_shader.SetUniform("uAmbientAlpha", 0.0f);
+            my_shader.SetUniform("uDiffuseAlpha", 0.7f);
+            my_shader.SetUniform("uCameraPos", camera.position);
+
             my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.9f)); // change val
-            //my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
-            //my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, other lights as well
+            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
+            my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, other lights as well
 
             // point light todo
 
             // spot light todo
 
-            // dir light todo
-
+            my_shader.SetUniform("uDirectionalLights[0].direction", glm::vec3(0.0f, -0.9f, -0.17f));
+            my_shader.SetUniform("uDirectionalLights[0].diffuse", glm::vec3(0.8f));
+            my_shader.SetUniform("uDirectionalLights[0].specular", glm::vec3(0.14f));
 
             // Draw non transparent scene
             for (auto& [key, value] : scene_non_transparent) {
