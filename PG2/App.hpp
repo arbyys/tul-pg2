@@ -59,6 +59,7 @@ private:
     static int window_height_return_from_fullscreen;
 
     Model* chair_object{};
+    Model* lamp_object{};
 
     float FOV = 89.0f;
     glm::mat4 mx_projection = glm::identity<glm::mat4>();
@@ -91,6 +92,7 @@ private:
     std::map<std::pair<unsigned int, unsigned int>, unsigned int> heights;
     float GetMapY(float x, float z);
     glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 world_down = glm::vec3(0.0f, -1.0f, 0.0f);
     double audio_walk_last_time = 0; // last time a walking audio was played
     void PlayerMovement(float deltatime);
     glm::vec3 camera_movement{};

@@ -34,7 +34,6 @@ private:
 
     //GLuint LoadTexture(const std::filesystem::path& file_name);
     //...
-    //TODO GLuint Model::LoadTexture ?
 
 
     std::vector<Vertex> vertices{};

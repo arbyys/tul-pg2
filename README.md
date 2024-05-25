@@ -19,11 +19,14 @@
 	- `MMB`: reset FOV na základní hodnotu
 	- `Q`: vypnutí aplikace
 
-## Temp poznámky
-- dořešit hodnoty uniformů světel v App.cpp (diffuse, specular atd.)
-- implementovat rozbíjení skleniček + jejich obnovu (posun v ose Y)
-- přepsat objloader
-- okomentovat opengl metody
+## Todo
+- J: mrknout na hodnoty uniformů světel v App.cpp (diffuse, specular atd.) - zprovoznit světla
+- J: implementovat hitboxy skleniček + rozbíjení (posun skleniček po ose Y) + jejich obnovení tlačítkem R
+- A: trochu přepsat objloader
+- A: okomentovat opengl metody
+- A: formátovat kód, učesat ho, odstranit zbytečnosti
+- ?: opravit čáry mezi texturama height mapy (nebo to nechat, to je asi fuk)
+- ?: opravit earrape při skoku v chůzi do kopce (nebo to nechat, to je asi fuk)
 
 ## Povinné požadavky
 - ✔ 3D GL Core shaders at least 4.5, GL debug

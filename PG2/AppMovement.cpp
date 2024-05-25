@@ -6,17 +6,16 @@
 void App::PlayerMovement(float delta_time) {
     camera_movement = camera.ProcessInput(window, delta_time);
     camera.position += camera_movement;
-    // todo lepší gravitace, 7.0 do konstanty (výchozí pozice kamery), doøešit momentum
     if (camera.IsJumping()) {
-        camera.position += world_up * Jump_speedUP * delta_time; // tady plus momentum
+        camera.position += world_up * Jump_speedUP * delta_time;
         if (camera.last_jump_time + Jump_time < glfwGetTime()) {
             camera.StopJump();
         }
     }
     else {
-        camera.position -= world_up * Jump_speedDown * delta_time; // tady plus momentum
+        camera.position -= world_up * Jump_speedDown * delta_time;
     }
-    //ceck colisiont on ground
+    //check collisions with ground
     float minPosition = GetMapY(camera.position.x, camera.position.z) + PlayerHeight;
     if (camera.position.y < minPosition)
     {
@@ -38,8 +37,6 @@ void App::PlayerMovement(float delta_time) {
     {
         audio.StopFootstepSound();
     }
-
-    glm::vec3 debugposition = camera.position; //only for debug todo delete this
     
 }
 void App::ChairMovement(float delta_time) {
@@ -113,6 +110,4 @@ void App::Teleport_chair(){
     unsigned int x = (unsigned int)(abs(Chair_max_X) + abs(Chair_min_X));
     unsigned int z = (unsigned int)(abs(Chair_max_Z) + abs(Chair_min_Z));
     scene_non_transparent["chair"]->position = glm::vec3(rand() % x - abs(Chair_min_X), -1 ,rand() % z - abs(Chair_min_Z));
-
-    //todo zvuk teleportu
 }
