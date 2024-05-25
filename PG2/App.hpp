@@ -65,6 +65,7 @@ private:
     static Camera camera;
     static double last_cursor_xpos;
     static double last_cursor_ypos;
+    bool mouse_look_enabled = true;
 
     unsigned int VAO;
     unsigned int VBO;

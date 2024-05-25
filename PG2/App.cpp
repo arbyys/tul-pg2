@@ -197,8 +197,7 @@ bool App::Init()
         // Transparency blending function
         
 
-        // todo - opravit blending
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
         InitAssets();
@@ -238,6 +237,7 @@ int App::Run(void)
         // Unbind
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         UpdateProjectionMatrix(); //updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
@@ -289,9 +289,9 @@ int App::Run(void)
             my_shader.SetUniform("uDiffuseAlpha", 0.7f);
             my_shader.SetUniform("uCameraPos", camera.position);
 
-            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.9f)); // change val
+            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.8f)); // change val
             my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
-            my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, other lights as well
+            my_shader.SetUniform("uMaterial.shininess", 45.0f); // change val, other lights as well
 
             // point light todo
 
