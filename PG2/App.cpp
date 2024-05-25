@@ -80,7 +80,7 @@ void App::InitAssets()
 
     float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
     for (int i = 0; i < N_GLASSES; ++i) {
-        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.0f, 8.0f+offsets[i]), 0.0025f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.5f, 8.0f+offsets[i]), 0.0035f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
         scene_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
     }
 
@@ -93,8 +93,8 @@ void App::InitAssets()
     // https://www.turbosquid.com/3d-models/3d-street-lamp-2210777
     std::filesystem::path lamp_model("./resources/objects/lamp.obj");
     std::filesystem::path lamp_texture("./resources/textures/lamp.png");
-    auto lamp = new Model(lamp_model, lamp_texture, glm::vec3(-80.0f, 1.0f, 9.0f), 4.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-    scene_non_transparent.insert(std::make_pair("lamp", lamp));
+    lamp_object = new Model(lamp_model, lamp_texture, glm::vec3(-80.0f, 1.0f, 9.0f), 4.5f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    scene_non_transparent.insert(std::make_pair("lamp", lamp_object));
 
     auto map = Model::CreateTerrain(glm::vec3(MAP_MOVE, 0.0f, MAP_MOVE), MAP_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), &heights);
     scene_non_transparent.insert(std::make_pair("map", map));
@@ -197,8 +197,7 @@ bool App::Init()
         // Transparency blending function
         
 
-        // todo - opravit blending
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
         InitAssets();
@@ -238,6 +237,7 @@ int App::Run(void)
         // Unbind
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         UpdateProjectionMatrix(); //updates mx_projection based on window size
         glViewport(0, 0, window_width, window_height);
@@ -285,16 +285,42 @@ int App::Run(void)
             //my_shader.SetUniform("uMxModel", mx_model);
             my_shader.SetUniform("uMxView", mx_view);
 
-            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.9f)); // change val
-            //my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
-            //my_shader.SetUniform("uMaterial.shininess", 96.0f); // change val, other lights as well
+            my_shader.SetUniform("uAmbientAlpha", 0.0f);
+            my_shader.SetUniform("uDiffuseAlpha", 0.7f);
+            my_shader.SetUniform("uCameraPos", camera.position);
 
-            // point light todo
+            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.8f)); // change val
+            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
+            my_shader.SetUniform("uMaterial.shininess", 45.0f); // change val, other lights as well
 
-            // spot light todo
+            // point light má být někde na židli, asi jedno kde
+            // prostě židle jak jezdí tak svítí
+            my_shader.SetUniform("uPointLights[0].diffuse", glm::vec3(0.0f, 1.0f, 1.0f));
+            my_shader.SetUniform("uPointLights[0].specular", glm::vec3(0.07f));
+            auto calculated_point_pos = glm::vec3(chair_object->position.x, chair_object->position.y + 5.0f, chair_object->position.z);
+            my_shader.SetUniform("uPointLights[0].position", calculated_point_pos);
+            my_shader.SetUniform("uPointLights[0].constant", 1.0f);
+            my_shader.SetUniform("uPointLights[0].linear", 1.0f);
+            my_shader.SetUniform("uPointLights[0].exponent", 0.5f);
 
-            // dir light todo
+            // spot light má být umístěno v lampě a svítit na stůl:
+            my_shader.SetUniform("uSpotLights[0].diffuse", glm::vec3(0.7f));
+            my_shader.SetUniform("uSpotLights[0].specular", glm::vec3(0.8f));
+            // výpočet pozice; vycházíme z pozice lampy, Y je potřeba nahoru
+            // asi bude potřeba světlo posunout i o kus dopředu
+            auto calculated_spot_pos = glm::vec3(lamp_object->position.x, lamp_object->position.y + 10.0f, lamp_object->position.z);
+            my_shader.SetUniform("uSpotLights[0].position", calculated_spot_pos);
+            my_shader.SetUniform("uSpotLights[0].direction", world_down);
+            my_shader.SetUniform("uSpotLights[0].cosInnerCone", glm::cos(glm::radians(50.0f)));
+            my_shader.SetUniform("uSpotLights[0].cosOuterCone", glm::cos(glm::radians(50.0f)));
+            my_shader.SetUniform("uSpotLights[0].constant", 1.0f);
+            my_shader.SetUniform("uSpotLights[0].linear", 0.5f);
+            my_shader.SetUniform("uSpotLights[0].exponent", 0.4f);
 
+            // directional light, mělo by to být "slunce", ale nejsem si jistej jestli to funguje, sus
+            my_shader.SetUniform("uDirectionalLights[0].direction", glm::vec3(0.0f, -0.9f, -0.17f));
+            my_shader.SetUniform("uDirectionalLights[0].diffuse", glm::vec3(0.8f));
+            my_shader.SetUniform("uDirectionalLights[0].specular", glm::vec3(0.14f));
 
             // Draw non transparent scene
             for (auto& [key, value] : scene_non_transparent) {

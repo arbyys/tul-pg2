@@ -27,9 +27,9 @@
 #define Change_chair_direction 3
 
 //projectile
-#define projectile_speed 25.0f
-#define N_PROJECTILES 3
-#define PROJECTILE_SCALE 0.3f
+#define projectile_speed 140.0f
+#define N_PROJECTILES 10
+#define PROJECTILE_SCALE 0.25f
 
 class App {
 public:
@@ -59,12 +59,14 @@ private:
     static int window_height_return_from_fullscreen;
 
     Model* chair_object{};
+    Model* lamp_object{};
 
     float FOV = 89.0f;
     glm::mat4 mx_projection = glm::identity<glm::mat4>();
     static Camera camera;
     static double last_cursor_xpos;
     static double last_cursor_ypos;
+    bool mouse_look_enabled = true;
 
     unsigned int VAO;
     unsigned int VBO;
@@ -90,6 +92,7 @@ private:
     std::map<std::pair<unsigned int, unsigned int>, unsigned int> heights;
     float GetMapY(float x, float z);
     glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 world_down = glm::vec3(0.0f, -1.0f, 0.0f);
     double audio_walk_last_time = 0; // last time a walking audio was played
     void PlayerMovement(float deltatime);
     glm::vec3 camera_movement{};
@@ -102,7 +105,7 @@ private:
 
     void Teleport_chair();
     float chair_speed = 10.0f;
-    glm::vec4 chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, 80.0f);
+    float random_increment = 30.0f;
 
     // projectiles
     Model* projectiles[N_PROJECTILES]{}; // Pool of projectiles

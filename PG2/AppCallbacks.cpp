@@ -14,8 +14,13 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
     if ((action == GLFW_PRESS) || (action == GLFW_REPEAT)) {
         switch (key) {
             case GLFW_KEY_ESCAPE:
-                // implementovat pauzu mouse-looku
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                this_inst->mouse_look_enabled = !this_inst->mouse_look_enabled;
+                if (this_inst->mouse_look_enabled) {
+                    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                }
+                else {
+                    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                }
                 break;
             case GLFW_KEY_Q:
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
@@ -36,11 +41,8 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 }
                 break;
             case GLFW_KEY_V:
-                // vsync odstranit zvuk teleportu
-                this_inst->audio.Play2DOneShot("sound_teleport");
                 is_vsync_on = !is_vsync_on;
                 glfwSwapInterval(is_vsync_on);
-                std::cout << "VSync: " << is_vsync_on << "\n";
                 break;
             case GLFW_KEY_C:
                 is_crosshair_toggled = !is_crosshair_toggled;
@@ -79,8 +81,6 @@ void App::mouse_button_callback(GLFWwindow* window, int button, int action, int 
 {
     auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        std::cout << "shoot!\n";
-        
         this_inst->Shoot();
         this_inst->audio.Play2DOneShot("sound_shoot");
     }
@@ -96,11 +96,12 @@ void App::mouse_button_callback(GLFWwindow* window, int button, int action, int 
 
 void App::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    ///*
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
-        camera.ProcessMouseMovement(static_cast<GLfloat>(xpos - last_cursor_xpos) , static_cast<GLfloat>(ypos - last_cursor_ypos));
+
+    auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
+    if (this_inst->mouse_look_enabled) {
+        camera.ProcessMouseMovement(static_cast<GLfloat>(xpos - last_cursor_xpos), static_cast<GLfloat>(ypos - last_cursor_ypos));
+        last_cursor_xpos = xpos;
+        last_cursor_ypos = ypos;
     }
-    last_cursor_xpos = xpos;
-    last_cursor_ypos = ypos;
-    /**/
+
 }

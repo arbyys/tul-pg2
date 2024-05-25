@@ -23,7 +23,8 @@ Audio::Audio()
 
 	// init sound effects
 	ISoundSource* sound_teleport = engine->addSoundSourceFromFile("resources/sounds/teleport.mp3");
-	sound_teleport->setDefaultVolume(0.15f);
+	sound_teleport->setDefaultVolume(35.0f);
+	sound_teleport->setDefaultMinDistance(12.0);
 	sound_list.insert({ "sound_teleport", sound_teleport });
 
 	ISoundSource* sound_land = engine->addSoundSourceFromFile("resources/sounds/jump_land.wav");
@@ -31,10 +32,9 @@ Audio::Audio()
 	sound_list.insert({ "sound_land", sound_land });
 
 	ISoundSource* sound_glass = engine->addSoundSourceFromFile("resources/sounds/glass_break.wav");
+	sound_glass->setDefaultVolume(35.0f);
+	sound_glass->setDefaultMinDistance(12.0);
 	sound_list.insert({ "sound_glass", sound_glass });
-
-	ISoundSource* sound_chair = engine->addSoundSourceFromFile("resources/sounds/chair_move.wav");
-	sound_list.insert({ "sound_chair", sound_chair });
 
 	ISoundSource* sound_shoot = engine->addSoundSourceFromFile("resources/sounds/shoot.wav");
 	sound_shoot->setDefaultVolume(0.20f);
@@ -56,8 +56,8 @@ Audio::Audio()
 
 	chair_sound = engine->play3D("resources/sounds/chair_move.wav", irrklang::vec3df(0, 0, 0), true, true, true);
 	if (chair_sound) {
-		chair_sound->setMinDistance(1.0f);
-		chair_sound->setVolume(3.0f);
+		chair_sound->setVolume(15.0f);
+		chair_sound->setMinDistance(14.0);
 	}
 
 }

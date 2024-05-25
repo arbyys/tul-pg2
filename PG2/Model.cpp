@@ -59,7 +59,6 @@ Model* Model::CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation,
                 + map.at<uchar>(cv::Point(x+ step_size, z+ step_size))
                 + map.at<uchar>(cv::Point(x, z+ step_size))) / 4;
             if (avarangeHeight > max_height) { max_height = avarangeHeight; }
-            //todo textures
             glm::vec2 tc0 = GetTextureByHeight(avarangeHeight);
             glm::vec2 tc1 = tc0 + glm::vec2((1.0f / 16), 0.0f);		    
             glm::vec2 tc2 = tc0 + glm::vec2((1.0f / 16), (1.0f / 16));  
@@ -115,10 +114,6 @@ glm::vec2 Model::GetTextureByHeight(unsigned int height){
     }
     return glm::vec2(2.0f / 16, 0.0f);
     
-}
-
-void Model::Rotate(glm::vec4 rotation) {
-
 }
 
 void Model::Draw(ShaderProgram& shader) {

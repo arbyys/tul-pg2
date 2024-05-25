@@ -3,11 +3,11 @@
 // 99 = dočasné vypnutí světel, poté nastavit na odpovídající hodnotu a odstranit v main()
 
 // slunce
-#define MAX_DIRECTIONAL_LIGHTS 99
+#define MAX_DIRECTIONAL_LIGHTS 1
 // lampa vedle stolu 
-#define MAX_SPOT_LIGHTS 99
+#define MAX_SPOT_LIGHTS 1
 // židle
-#define MAX_POINT_LIGHTS 99
+#define MAX_POINT_LIGHTS 1
 
 
 // [IN] Atributy vertexu;  VS -> FS
@@ -124,24 +124,18 @@ void main()
 	vec4 outColor = vec4(0.0f);
 
 	// výpočet Directional světel
-	if (MAX_DIRECTIONAL_LIGHTS != 99) {
-		for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++) {
-			outColor += getDirectionalLight(uDirectionalLights[i], normal, fragToCam);  
-		}
+	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++) {
+		outColor += getDirectionalLight(uDirectionalLights[i], normal, fragToCam);  
 	}
 
 	// výpočet Point světel
-	if (MAX_POINT_LIGHTS != 99) {
-		for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
-			outColor += getPointLight(uPointLights[i], normal, oPos, fragToCam);  
-		}
+	for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+		outColor += getPointLight(uPointLights[i], normal, oPos, fragToCam);  
 	}
 
 	// výpočet Spotlight světel
-	if (MAX_SPOT_LIGHTS != 99) {
-		for (int i = 0; i < MAX_SPOT_LIGHTS; i++) {
-			outColor += getSpotLight(uSpotLights[i], normal, oPos, fragToCam);  
-		}
+	for (int i = 0; i < MAX_SPOT_LIGHTS; i++) {
+		outColor += getSpotLight(uSpotLights[i], normal, oPos, fragToCam);  
 	}
 
 	// výpočet Ambient světla (nakonec)

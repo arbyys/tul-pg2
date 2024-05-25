@@ -1,17 +1,10 @@
 # PG2 - 3D aplikace
 
-## Srcs
-- https://github.com/RadekMocek/PG2
-- https://github.com/Bahamut731lp/PG2
-- https://github.com/dominikjires/PG2
-- https://github.com/DavidKarnik/pg2
-- https://github.com/jirihalbych/PG2
-
 ## Popis aplikace
 - **vlastnosti**
 	- náhodně jezdící kolečková židle
 	- střela do židle ji teleportuje na jiné (náhodné) místo
-	- skleničky s vínem na stole, rozbijou se při střele
+	- skleničky na stole, střela je rozbije
 - **ovládání**
 	- `WSAD`: pohyb
 	- `LMB`: výstřel
@@ -26,11 +19,14 @@
 	- `MMB`: reset FOV na základní hodnotu
 	- `Q`: vypnutí aplikace
 
-## Temp poznámky
-- domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
-- přepsat objloader
-- okomentovat opengl metody
-- opravit židli rotaci
+## Todo
+- J: mrknout na hodnoty uniformů světel v App.cpp (diffuse, specular atd.) - zprovoznit světla
+- J: implementovat hitboxy skleniček + rozbíjení (posun skleniček po ose Y) + jejich obnovení tlačítkem R
+- A: trochu přepsat objloader
+- A: okomentovat opengl metody
+- A: formátovat kód, učesat ho, odstranit zbytečnosti
+- ?: opravit čáry mezi texturama height mapy (nebo to nechat, to je asi fuk)
+- ?: opravit earrape při skoku v chůzi do kopce (nebo to nechat, to je asi fuk)
 
 ## Povinné požadavky
 - ✔ 3D GL Core shaders at least 4.5, GL debug
@@ -40,7 +36,7 @@
 - ✔ multiple dirent independently moving 3D models, at leats two loaded from file
 - ✔ at least th different textures (or subtextures from texture atlas etc.)
 - ❌ lighting model, at least 3 lights (ambient+directional+reflector: at least one is moving; + possible other lights)
-- ❌ correct full scale transparency (at least one transparent object; NOT if(alpha<0.1) {discard;} )
+- ✔ correct full scale transparency (at least one transparent object; NOT if(alpha<0.1) {discard;} )
 
 
 ## Rozšiřující požadavky
