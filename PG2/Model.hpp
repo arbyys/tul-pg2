@@ -15,7 +15,6 @@ public:
     Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation);
     static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation, std::map<std::pair<unsigned int, unsigned int>, unsigned int>* heights);
     void Draw(ShaderProgram& shader);
-    void Rotate(glm::vec4 rotation);
     float camera_distance;
 
     glm::vec3 position{};
@@ -23,7 +22,7 @@ public:
     char id = 'u';
     glm::vec3 collision_min{};
     glm::vec3 collision_max{};
-    glm::vec4 rotation = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    glm::vec4 rotation = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
 
 private:
     Mesh mesh;

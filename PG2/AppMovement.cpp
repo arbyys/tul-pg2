@@ -48,12 +48,10 @@ void App::ChairMovement(float delta_time) {
         Last_chair_direction = glfwGetTime();
         chair_speed = 20.0f + static_cast<float>(rand()) / RAND_MAX * (80.0f - 20.0f); // random chair speed
 
-        float random_angle = 30.0f + static_cast<float>(rand()) / RAND_MAX * (450.0f - 30.0f);
-
-        chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, random_angle);
+        random_increment = 30.0f + static_cast<float>(rand()) / RAND_MAX * (450.0f - 30.0f);
     }
     scene_non_transparent["chair"]->position += chair_direction * delta_time * chair_speed;
-    scene_non_transparent["chair"]->rotation += chair_rotation * delta_time;
+    scene_non_transparent["chair"]->rotation.w += random_increment * delta_time;
     if (scene_non_transparent["chair"]->position.x > Chair_max_X) 
     { scene_non_transparent["chair"]->position.x = Chair_max_X; }
     else if (scene_non_transparent["chair"]->position.x < Chair_min_X) 
@@ -79,15 +77,17 @@ void App::ProjectileMovement(float delta_time){
         if (!is_projectile_moving[i]) { continue; }
         auto& position = projectiles[i]->position;
         position += projectile_directions[i] * projectile_speed * delta_time;
-        //kolize s modeli
+        //kolize s modely
         for (Model* collision : collisions) {
             if(IsCollision(position,collision))
             {
                 position = glm::vec3(0, -10, 0);
-                //todo zvuk nárazu
                 is_projectile_moving[i] = false;
 
-                if (collision->id == 'c') { Teleport_chair(); }
+                if (collision->id == 'c') { 
+                    Teleport_chair();
+                    audio.Play3DOneShot("sound_teleport", collision->position);
+                }
             }
         }
         //kolize se zemí
@@ -95,7 +95,6 @@ void App::ProjectileMovement(float delta_time){
         if (position.y < groundY) {
             is_projectile_moving[i] = false;
             position.y = groundY;
-            //todo zvuk nárazu do země
         }
     }
 }
@@ -111,7 +110,6 @@ bool App::IsCollision(glm::vec3 bullet,Model* model)
         bullet.z >= model->position.z + model->collision_min.x;
 }
 void App::Teleport_chair(){
-    print("teleport");
     unsigned int x = (unsigned int)(abs(Chair_max_X) + abs(Chair_min_X));
     unsigned int z = (unsigned int)(abs(Chair_max_Z) + abs(Chair_min_Z));
     scene_non_transparent["chair"]->position = glm::vec3(rand() % x - abs(Chair_min_X), -1 ,rand() % z - abs(Chair_min_Z));

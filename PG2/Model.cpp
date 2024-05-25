@@ -117,10 +117,6 @@ glm::vec2 Model::GetTextureByHeight(unsigned int height){
     
 }
 
-void Model::Rotate(glm::vec4 rotation) {
-
-}
-
 void Model::Draw(ShaderProgram& shader) {
 
     // Einheitsmatrix

@@ -27,9 +27,9 @@
 #define Change_chair_direction 3
 
 //projectile
-#define projectile_speed 25.0f
-#define N_PROJECTILES 3
-#define PROJECTILE_SCALE 0.3f
+#define projectile_speed 140.0f
+#define N_PROJECTILES 10
+#define PROJECTILE_SCALE 0.25f
 
 class App {
 public:
@@ -102,7 +102,7 @@ private:
 
     void Teleport_chair();
     float chair_speed = 10.0f;
-    glm::vec4 chair_rotation = glm::vec4(0.0f, 0.0f, 1.0f, 80.0f);
+    float random_increment = 30.0f;
 
     // projectiles
     Model* projectiles[N_PROJECTILES]{}; // Pool of projectiles
