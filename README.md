@@ -1,34 +1,30 @@
 # PG2 - 3D aplikace
 
-## Srcs
-- https://github.com/RadekMocek/PG2
-- https://github.com/Bahamut731lp/PG2
-- https://github.com/dominikjires/PG2
-- https://github.com/DavidKarnik/pg2
-- https://github.com/jirihalbych/PG2
-
 ## Popis aplikace
+- **závislosti**
+	- OpenGL 4.9.0+ (cestu k instalaci umístit do PATH, např. `opencv\build\x64\vc16\bin`)
 - **vlastnosti**
-	- náhodně jezdící kolečková židle
+	- náhodně jezdící a točící se kolečková židle
 	- střela do židle ji teleportuje na jiné (náhodné) místo
 	- skleničky s vínem na stole, rozbijou se při střele
 - **ovládání**
 	- `WSAD`: pohyb
 	- `LMB`: výstřel
 	- `Space`: skok
-	- `LCtrl`: sprint (držení)
-	- `ESC`: ovládání kamery myší (toggle)
+	- `LCtrl`: sprint
+	- `ESC`: vypnutí ovládání kamery pomocí myši
 	- `F`: fullscreen
 	- `V`: ovládání vsync
 	- `R`: obnova rozbitých skleniček
-	- `+` / `-`: změna FOV
+	- `C`: ovládání zobrazení crosshairu
+	- `SCROLL`: změna FOV
+	- `MMB`: reset FOV na základní hodnotu
+	- `Q`: vypnutí aplikace
 
-## Temp poznámky
-- domyslet světla (skleničky budou svítit?, vystřelený projektil bude svítit?)
-- implementovat skok
-- přepsat objloader
+## Todo
+- J: implementovat hitboxy skleniček + rozbíjení (posun skleniček po ose Y) + jejich obnovení tlačítkem R
 
-## Povinné požadavky [✔ ❌]
+## Povinné požadavky
 - ✔ 3D GL Core shaders at least 4.5, GL debug
 - ✔ high perforce => at least 60 FPS
 - ✔ allow VSyncntrol, fullscreen vs. windowed switching (restore window position & size)
@@ -40,8 +36,8 @@
 
 
 ## Rozšiřující požadavky
-- ❌ height map textured by height & proper player height coords
-- ❌ working collisions (only projectiles x environment)
+- ✔ height map textured by height & proper player height coords
+- ✔ working collisions (only projectiles x environment)
 - ❌ particles
-- ❌ scripting (useful)
-- ❌ audio (better than just background)
+- ✔ scripting (useful)
+- ✔ audio (better than just background)
