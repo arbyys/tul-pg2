@@ -115,7 +115,7 @@ bool App::IsCollision(glm::vec3 bullet,Model* model)
         bullet.y <= model->position.y + model->collision_max.y &&
         bullet.y >= model->position.y + model->collision_min.y &&
         bullet.z <= model->position.z + model->collision_max.z &&
-        bullet.z >= model->position.z + model->collision_min.x;
+        bullet.z >= model->position.z + model->collision_min.z;
 }
 
 
