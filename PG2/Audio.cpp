@@ -2,11 +2,6 @@
 
 #include "Audio.hpp"
 
-#define VOLUME_WALK 0.2f
-#define VOLUME_RUN 0.3f
-#define VOLUME_BREAK 0.5f
-#define VOLUME_CHAIR 0.7f
-#define VOLUME_LAND 0.5f
 #define VOLUME_MUSIC 0.03f
 
 #define print(x) std::cout << x << "\n"
@@ -41,7 +36,6 @@ Audio::Audio()
 	sound_list.insert({ "sound_shoot", sound_shoot });
 
 	// init footstep sound
-
 	walking_sound = engine->play2D("resources/sounds/walk.wav", true, true, true);
 	if (walking_sound) {
 		walking_sound->setVolume(0.45f);
@@ -53,7 +47,6 @@ Audio::Audio()
 	}
 
 	// init chair sound
-
 	chair_sound = engine->play3D("resources/sounds/chair_move.wav", irrklang::vec3df(0, 0, 0), true, true, true);
 	if (chair_sound) {
 		chair_sound->setVolume(15.0f);
@@ -78,11 +71,9 @@ void Audio::UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec
 
 void Audio::PlayBgMusic()
 {
-	//bg_music = engine->play3D("resources/sounds/music.mp3", irrklang::vec3df(2, 2, 2), true, false, true);
 	bg_music = engine->play2D("resources/sounds/music.mp3", true, false, true);
 	print(bg_music);
 	if (bg_music) {
-		//bg_music->setMinDistance(5.0f);
 		bg_music->setVolume(VOLUME_MUSIC);
 	}
 }
@@ -98,7 +89,6 @@ void Audio::PlayFootstepSound(bool runningNotWalking)
 		running_sound->setIsPaused(true);
 	}
 }
-
 
 void Audio::UpdateChairPosition(glm::vec3 position)
 {

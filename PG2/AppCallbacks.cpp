@@ -48,7 +48,7 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 is_crosshair_toggled = !is_crosshair_toggled;
                 break;
             case GLFW_KEY_R:
-                // reset sklenièek
+                // todo reset sklenièek
                 break;
         }
     }
@@ -62,19 +62,13 @@ void App::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 }
 
 void App::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    ///*
     auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
     this_inst->window_width = width;
     this_inst->window_height = height;
     // set viewport
     glViewport(0, 0, width, height);
-    //now your canvas has [0,0] in bottom left corner, and its size is [width x height] 
+    // now your canvas has [0,0] in bottom left corner, and its size is [width x height] 
     this_inst->UpdateProjectionMatrix();
-    /**/
-
-    /*
-    glViewport(0, 0, width, height);
-    /**/
 }
 
 void App::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -83,9 +77,6 @@ void App::mouse_button_callback(GLFWwindow* window, int button, int action, int 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         this_inst->Shoot();
         this_inst->audio.Play2DOneShot("sound_shoot");
-    }
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
-        //std::cout << "Right click!\n";
     }
     if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) {
         auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
@@ -96,12 +87,10 @@ void App::mouse_button_callback(GLFWwindow* window, int button, int action, int 
 
 void App::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-
     auto this_inst = static_cast<App*>(glfwGetWindowUserPointer(window));
     if (this_inst->mouse_look_enabled) {
         camera.ProcessMouseMovement(static_cast<GLfloat>(xpos - last_cursor_xpos), static_cast<GLfloat>(ypos - last_cursor_ypos));
         last_cursor_xpos = xpos;
         last_cursor_ypos = ypos;
     }
-
 }

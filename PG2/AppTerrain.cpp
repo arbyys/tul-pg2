@@ -5,16 +5,10 @@
 #define print(x) std::cout << x << "\n"
 
 float App::GetMapY(float x, float z) {
-    //  ^   3-----2
-    //  |   |    /|
-    //  |   |  /  |
-    //  |   |/    |
-    //  z   0-----1
-    //   x ------->
     x = x - MAP_MOVE;
     z = z - MAP_MOVE;
 
-    unsigned int step = 10 * MAP_SCALE; //step used in Model::CreateTerrain
+    unsigned int step = 10 * MAP_SCALE; // step used in Model::CreateTerrain
     double InverseStep = 2.5; // 1/step
 
     unsigned int lowX = std::floor(x);

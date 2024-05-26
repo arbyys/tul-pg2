@@ -39,7 +39,6 @@ GLuint TextureGen(cv::Mat& image)
 		img_format = GL_BGR;
 		break;
 	case 4:
-		// if channels() == RGBA, we have a Alpha channel, aka semitransparent texture
 		img_internalformat = GL_COMPRESSED_RGBA;
 		img_format = GL_BGRA;
 		break;
@@ -90,16 +89,7 @@ GLuint TextureGen(cv::Mat& image)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-	// Texture filters - pick one
-
-	// nearest neighbor - ugly & fast 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	// bilinear - nicer & slower
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+	// Texture filters 
 	// MIPMAP filtering + automatic MIPMAP generation - nicest, needs more memory. Notice: MIPMAP is only for image minifying.
 	glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bilinear magnifying
