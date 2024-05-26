@@ -107,10 +107,13 @@ void App::InitAssets()
     std::filesystem::path model_bullet_path("./resources/objects/sphere.obj");
     std::filesystem::path bullet_texture("./resources/textures/red.png");
     for (int i = 0; i < N_PROJECTILES; i++) {
-        auto obj_projectile_x = new Model(model_bullet_path,bullet_texture, glm::vec3(0.0f, -10.0f, 0.0f),PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+        auto obj_projectile_x = new Model(model_bullet_path,bullet_texture, glm::vec3(0.0f, -10.0f, 0.0f), PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
         projectiles[i] = obj_projectile_x;
     }
-    
+
+    //auto gagag = new Model(model_bullet_path, bullet_texture, glm::vec3(-78.0f, 16.0f, 9.0f), PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    //scene_non_transparent.insert(std::make_pair("gagag", gagag));
+
 }
 
 // App initialization, if returns true then run run()
@@ -289,38 +292,35 @@ int App::Run(void)
             my_shader.SetUniform("uDiffuseAlpha", 0.7f);
             my_shader.SetUniform("uCameraPos", camera.position);
 
-            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.8f)); // change val
-            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f)); // change val
-            my_shader.SetUniform("uMaterial.shininess", 45.0f); // change val, other lights as well
+            my_shader.SetUniform("uMaterial.ambient", glm::vec3(0.8f));
+            my_shader.SetUniform("uMaterial.specular", glm::vec3(1.0f));
+            my_shader.SetUniform("uMaterial.shininess", 75.0f);
 
-            // point light má být někde na židli, asi jedno kde
-            // prostě židle jak jezdí tak svítí
+            // directional light, mělo by to být "slunce", ale nejsem si jistej jestli to funguje, sus
+            my_shader.SetUniform("uDirectionalLights[0].direction", glm::vec3(0.0f, -1.0f, -0.17f));
+            my_shader.SetUniform("uDirectionalLights[0].diffuse", glm::vec3(0.8f));
+            my_shader.SetUniform("uDirectionalLights[0].specular", glm::vec3(0.44f));
+
+            // point light hotovo, je na židli
             my_shader.SetUniform("uPointLights[0].diffuse", glm::vec3(0.0f, 1.0f, 1.0f));
-            my_shader.SetUniform("uPointLights[0].specular", glm::vec3(0.07f));
+            my_shader.SetUniform("uPointLights[0].specular", glm::vec3(0.5f));
             auto calculated_point_pos = glm::vec3(chair_object->position.x, chair_object->position.y + 5.0f, chair_object->position.z);
             my_shader.SetUniform("uPointLights[0].position", calculated_point_pos);
             my_shader.SetUniform("uPointLights[0].constant", 1.0f);
-            my_shader.SetUniform("uPointLights[0].linear", 1.0f);
+            my_shader.SetUniform("uPointLights[0].linear", 0.5f);
             my_shader.SetUniform("uPointLights[0].exponent", 0.5f);
 
             // spot light má být umístěno v lampě a svítit na stůl:
             my_shader.SetUniform("uSpotLights[0].diffuse", glm::vec3(0.7f));
-            my_shader.SetUniform("uSpotLights[0].specular", glm::vec3(0.8f));
-            // výpočet pozice; vycházíme z pozice lampy, Y je potřeba nahoru
-            // asi bude potřeba světlo posunout i o kus dopředu
-            auto calculated_spot_pos = glm::vec3(lamp_object->position.x, lamp_object->position.y + 10.0f, lamp_object->position.z);
-            my_shader.SetUniform("uSpotLights[0].position", calculated_spot_pos);
+            my_shader.SetUniform("uSpotLights[0].specular", glm::vec3(0.56f));
+            // pozice by takhle měla být OK
+            my_shader.SetUniform("uSpotLights[0].position", glm::vec3(-78.0f, 16.0f, 9.0f));
             my_shader.SetUniform("uSpotLights[0].direction", world_down);
-            my_shader.SetUniform("uSpotLights[0].cosInnerCone", glm::cos(glm::radians(50.0f)));
-            my_shader.SetUniform("uSpotLights[0].cosOuterCone", glm::cos(glm::radians(50.0f)));
+            my_shader.SetUniform("uSpotLights[0].cosInnerCone", glm::cos(glm::radians(20.5f)));
+            my_shader.SetUniform("uSpotLights[0].cosOuterCone", glm::cos(glm::radians(27.0f)));
             my_shader.SetUniform("uSpotLights[0].constant", 1.0f);
-            my_shader.SetUniform("uSpotLights[0].linear", 0.5f);
-            my_shader.SetUniform("uSpotLights[0].exponent", 0.4f);
-
-            // directional light, mělo by to být "slunce", ale nejsem si jistej jestli to funguje, sus
-            my_shader.SetUniform("uDirectionalLights[0].direction", glm::vec3(0.0f, -0.9f, -0.17f));
-            my_shader.SetUniform("uDirectionalLights[0].diffuse", glm::vec3(0.8f));
-            my_shader.SetUniform("uDirectionalLights[0].specular", glm::vec3(0.14f));
+            my_shader.SetUniform("uSpotLights[0].linear", 0.07f);
+            my_shader.SetUniform("uSpotLights[0].exponent", 0.017f);
 
             // Draw non transparent scene
             for (auto& [key, value] : scene_non_transparent) {
