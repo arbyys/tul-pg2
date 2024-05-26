@@ -93,8 +93,7 @@ void App::ProjectileMovement(float delta_time){
                 }
                 if (collision->id == 'g') {
                     collision->position += glm::vec3(0, -15, 0);
-                    //todo audio rozbiti skleniček
-                    
+                    audio.Play3DOneShot("sound_glass", collision->position);
                 }
             }
         }

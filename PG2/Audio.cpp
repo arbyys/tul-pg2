@@ -26,10 +26,10 @@ Audio::Audio()
 	sound_land->setDefaultVolume(0.35f);
 	sound_list.insert({ "sound_land", sound_land });
 
-	ISoundSource* sound_glass = engine->addSoundSourceFromFile("resources/sounds/glass_break.wav");
-	sound_glass->setDefaultVolume(35.0f);
+	ISoundSource* sound_glass = engine->addSoundSourceFromFile("resources/sounds/glass_break.mp3");
+	sound_glass->setDefaultVolume(40.0f);
 	sound_glass->setDefaultMinDistance(12.0);
-	sound_list.insert({ "sound_glass", sound_glass });
+	sound_list.insert({ "sound_glass", sound_glass }); 
 
 	ISoundSource* sound_shoot = engine->addSoundSourceFromFile("resources/sounds/shoot.wav");
 	sound_shoot->setDefaultVolume(0.20f);

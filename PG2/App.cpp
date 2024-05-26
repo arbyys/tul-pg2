@@ -111,6 +111,7 @@ void App::InitAssets()
     for (int i = 0; i < N_PROJECTILES; i++) {
         auto obj_projectile_x = new Model(model_bullet_path,bullet_texture, glm::vec3(0.0f, -10.0f, 0.0f), PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
         projectiles[i] = obj_projectile_x;
+        scene_non_transparent.insert(std::make_pair("projectile" + std::to_string(i), obj_projectile_x));
     }
 }
 
@@ -305,9 +306,7 @@ int App::Run(void)
             for (auto& [key, value] : scene_non_transparent) {
                 value->Draw(my_shader);
             }
-            for (auto& projectile : projectiles) {
-                projectile->Draw(my_shader);
-            }
+
 
             // Draw transparent scene
 
