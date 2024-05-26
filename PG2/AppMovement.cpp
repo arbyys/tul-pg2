@@ -91,6 +91,11 @@ void App::ProjectileMovement(float delta_time){
                     Teleport_chair();
                     audio.Play3DOneShot("sound_teleport", collision->position);
                 }
+                if (collision->id == 'g') {
+                    collision->position += glm::vec3(0, -15, 0);
+                    //todo audio rozbiti skleniček
+                    
+                }
             }
         }
 
@@ -109,13 +114,22 @@ bool App::IsCollision(glm::vec3 bullet,Model* model)
     return bullet.x <= model->position.x + model->collision_max.x &&
         bullet.x >= model->position.x + model->collision_min.x &&
         bullet.y <= model->position.y + model->collision_max.y &&
-        bullet.y >= model->position.y + model->collision_min.x &&
+        bullet.y >= model->position.y + model->collision_min.y &&
         bullet.z <= model->position.z + model->collision_max.z &&
         bullet.z >= model->position.z + model->collision_min.x;
 }
+
 
 void App::Teleport_chair(){
     unsigned int x = (unsigned int)(abs(Chair_max_X) + abs(Chair_min_X));
     unsigned int z = (unsigned int)(abs(Chair_max_Z) + abs(Chair_min_Z));
     scene_non_transparent["chair"]->position = glm::vec3(rand() % x - abs(Chair_min_X), -1 ,rand() % z - abs(Chair_min_Z));
+}
+void App::ResetGlass() {
+    for (Model* collision : collisions) {
+        if (collision->id == 'g')
+        {
+            collision->position.y = GLASS_Y;
+        }
+    }
 }
