@@ -70,7 +70,7 @@ void App::InitAssets()
     scene_non_transparent.insert(std::make_pair("chair", chair_object));
     collisions.push_back(chair_object);
     chair_object->collision_max = glm::vec3(2,10.4f,2);
-    chair_object->collision_min = glm::vec3(-2,-1,-2);
+    chair_object->collision_min = glm::vec3(-2, -2,-2);
     chair_object->id = 'c';
 
     // glass object
@@ -78,8 +78,12 @@ void App::InitAssets()
     std::filesystem::path glass_texture("./resources/textures/glass.png");
     float offsets[N_GLASSES] = { 2.5f, 0.0f, -2.5f };
     for (int i = 0; i < N_GLASSES; ++i) {
-        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, 6.5f, 8.0f+offsets[i]), 0.0035f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+        auto glass = new Model(glass_model, glass_texture, glm::vec3(-75.0f, GLASS_Y, 8.0f+offsets[i]), 0.0035f, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
         scene_transparent.insert(std::make_pair("glass" + std::to_string(i), glass));
+        collisions.push_back(glass);
+        glass->collision_max = glm::vec3(0.5f, 1.2f, 0.5f);
+        glass->collision_min = glm::vec3(-0.5f, -1.2f, -0.5f);
+        glass->id = 'g';
     }
 
     // table object
@@ -107,6 +111,7 @@ void App::InitAssets()
     for (int i = 0; i < N_PROJECTILES; i++) {
         auto obj_projectile_x = new Model(model_bullet_path,bullet_texture, glm::vec3(0.0f, -10.0f, 0.0f), PROJECTILE_SCALE, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
         projectiles[i] = obj_projectile_x;
+        scene_non_transparent.insert(std::make_pair("projectile" + std::to_string(i), obj_projectile_x));
     }
 }
 
@@ -301,9 +306,7 @@ int App::Run(void)
             for (auto& [key, value] : scene_non_transparent) {
                 value->Draw(my_shader);
             }
-            for (auto& projectile : projectiles) {
-                projectile->Draw(my_shader);
-            }
+
 
             // Draw transparent scene
 

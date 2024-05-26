@@ -9,7 +9,10 @@
 
 #define MAP_SCALE 0.4f
 #define MAP_MOVE -200.0f
+
+//glass
 #define N_GLASSES 3
+#define GLASS_Y 6.5f
 
 #define PlayerHeight 10.0f // how high is player above terrain
 #define Jump_speedUP 25.0f // jump multiplier
@@ -116,4 +119,7 @@ private:
     void ProjectileMovement(float delta_time);
     void Shoot();
     bool IsCollision(glm::vec3 bullet, Model* model);
+
+    //glass
+    void ResetGlass();
 };

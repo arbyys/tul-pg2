@@ -48,7 +48,7 @@ void App::key_callback(GLFWwindow* window, int key, int scancode, int action, in
                 is_crosshair_toggled = !is_crosshair_toggled;
                 break;
             case GLFW_KEY_R:
-                // todo reset sklenièek
+                this_inst->ResetGlass();
                 break;
         }
     }
