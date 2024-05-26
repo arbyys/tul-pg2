@@ -31,7 +31,7 @@
 - ✔ event proceng (camera, object, app behaviour...): mouse (both axes, wheel), keyboard
 - ✔ multiple dirent independently moving 3D models, at leats two loaded from file
 - ✔ at least th different textures (or subtextures from texture atlas etc.)
-- ❌ lighting model, at least 3 lights (ambient+directional+reflector: at least one is moving; + possible other lights)
+- ✔ lighting model, at least 3 lights (ambient+directional+reflector: at least one is moving; + possible other lights)
 - ✔ correct full scale transparency (at least one transparent object; NOT if(alpha<0.1) {discard;} )
 
 
