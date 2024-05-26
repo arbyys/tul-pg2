@@ -2,11 +2,11 @@
 
 ## Popis aplikace
 - **závislosti**
-	- OpenGL 4.9.0+ (cestu k instalaci umístit do PATH, např. `opencv\build\x64\vc16\bin`)
+	- OpenGL 4.9+ (cestu k instalaci umístit do PATH, např. `opencv\build\x64\vc16\bin`)
 - **vlastnosti**
 	- náhodně jezdící a točící se kolečková židle
 	- střela do židle ji teleportuje na jiné (náhodné) místo
-	- skleničky na stole, střela je rozbije
+	- průhledné skleničky na stole, střela je rozbije
 - **ovládání**
 	- `WSAD`: pohyb
 	- `LMB`: výstřel
@@ -20,9 +20,6 @@
 	- `SCROLL`: změna FOV
 	- `MMB`: reset FOV na základní hodnotu
 	- `Q`: vypnutí aplikace
-
-## Todo
-- J: implementovat hitboxy skleniček + rozbíjení (posun skleniček po ose Y) + jejich obnovení tlačítkem R
 
 ## Povinné požadavky
 - ✔ 3D GL Core shaders at least 4.5, GL debug
