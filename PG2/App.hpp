@@ -11,14 +11,14 @@
 #define MAP_MOVE -200.0f
 #define N_GLASSES 3
 
-#define PlayerHeight 10.0f //how high is player above terrain
-#define Jump_speedUP 25.0f // multiplayer for jump
-#define Jump_speedDown 35.0f //multiplayer for falling
-#define Jump_time 0.3 // how long can player jump in seconds
+#define PlayerHeight 10.0f // how high is player above terrain
+#define Jump_speedUP 25.0f // jump multiplier
+#define Jump_speedDown 35.0f // falling multiplier
+#define Jump_time 0.3 // for how long minimal can player jump in seconds
 
-#define WALK_AUDIO_DELAY 1 //how often play walk audio in seconds
+#define WALK_AUDIO_DELAY 1 // how often play walking audio in seconds
 
-//chair
+// chair
 #define Chair_max_X 80.0f
 #define Chair_min_X -110.0f
 #define Chair_max_Z 80.0f
@@ -26,7 +26,7 @@
 #define ChairHeight 1.0f
 #define Change_chair_direction 3
 
-//projectile
+// projectile
 #define projectile_speed 140.0f
 #define N_PROJECTILES 10
 #define PROJECTILE_SCALE 0.25f
@@ -88,6 +88,7 @@ private:
     ShaderProgram my_shader;
     ShaderProgram crosshair_shader;
     Audio audio;
+
     //colision
     std::map<std::pair<unsigned int, unsigned int>, unsigned int> heights;
     float GetMapY(float x, float z);
