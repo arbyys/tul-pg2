@@ -7,7 +7,6 @@
 
 class ShaderProgram {
 public:
-	// you can add more constructors for pipeline with GS, TS etc.
 	ShaderProgram(void) = default; //does nothing
 	ShaderProgram(const std::filesystem::path& VS_file, const std::filesystem::path& FS_file); // load, compile, and link shader
 

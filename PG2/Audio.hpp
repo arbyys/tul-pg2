@@ -11,13 +11,12 @@ class Audio
 public:
 	Audio();
 
-	// All 3D sound
 	void UpdateListenerPosition(glm::vec3 position, glm::vec3 front, glm::vec3 world_up);
-
-	// Sound effects
 	void Play2DOneShot(std::string sound_name);
 	void Play3DOneShot(std::string sound_name, glm::vec3 position);
-	void PlayFootstepSound();
+	void PlayFootstepSound(bool runningNotWalking);
+	void StopFootstepSound();
+	void UpdateChairPosition(glm::vec3 position);
 	void PlayBgMusic();
 
 	~Audio();
@@ -27,6 +26,9 @@ private:
 	std::map<std::string, ISoundSource*> sound_list;
 
 	irrklang::ISound* bg_music = nullptr;
-
-	bool isCharacterRunning = false;
+	irrklang::ISound* walking_sound = nullptr;
+	irrklang::ISound* running_sound = nullptr;
+	irrklang::ISound* chair_sound = nullptr;
+	
+	bool footstepSoundPlaying = false;
 };

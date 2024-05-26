@@ -12,6 +12,8 @@
 
 #include "ShaderProgram.hpp"
 
+#define print(x) std::cout << x << "\n"
+
 ShaderProgram::ShaderProgram(const std::filesystem::path& VS_file, const std::filesystem::path& FS_file)
 {
 	std::vector<GLuint> shader_ids;
@@ -24,7 +26,6 @@ ShaderProgram::ShaderProgram(const std::filesystem::path& VS_file, const std::fi
 }
 
 void ShaderProgram::Activate(void) {
-	std::cout << "Activating shader ID=" << ID << "\n";
 	glUseProgram(ID);
 }
 
@@ -121,13 +122,13 @@ GLuint ShaderProgram::CompileShader(const std::filesystem::path& source_file, co
 	// create and use shaders
 	GLuint shader_h = glCreateShader(type);
 	
-	//const char* shader_string = TextFileRead(source_file).c_str(); // Dangling pointer, does not work
 	std::string str = TextFileRead(source_file);
 	const char* shader_string = str.c_str();
 
 	glShaderSource(shader_h, 1, &shader_string, NULL);
 	glCompileShader(shader_h);
-	{ // check compile result, display error (if any)
+	{ 
+		// check compile result, display error (if any)
 		GLint cmpl_status;
 		glGetShaderiv(shader_h, GL_COMPILE_STATUS, &cmpl_status);
 		if (cmpl_status == GL_FALSE) {
@@ -146,7 +147,8 @@ GLuint ShaderProgram::LinkShader(const std::vector<GLuint> shader_ids)
 	}
 
 	glLinkProgram(prog_h);
-	{ // check link result, display error (if any)
+	{ 
+		// check link result, display error (if any)
 		GLint status;
 		glGetProgramiv(prog_h, GL_LINK_STATUS, &status);
 		if (status == GL_FALSE) {
@@ -159,9 +161,17 @@ GLuint ShaderProgram::LinkShader(const std::vector<GLuint> shader_ids)
 }
 
 std::string ShaderProgram::TextFileRead(const std::filesystem::path& fn) {
-	std::ifstream file(fn);
+	std::ifstream file(fn, std::ios::binary);
 	if (!file.is_open())
 		throw std::exception("Error opening file.\n");
+
+	// if file contains BOM, it is skipped
+	char bom[3] = { 0 };
+	file.read(bom, 3);
+	if (bom[0] != '\xEF' || bom[1] != '\xBB' || bom[2] != '\xBF') {
+		file.seekg(0);
+	}
+
 	std::stringstream ss;
 	ss << file.rdbuf();
 	return ss.str();

@@ -8,11 +8,14 @@
 
 Camera::Camera(glm::vec3 position) : position(position)
 {
-    //this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+    this->world_down = glm::vec3(0.0f, 0.0f, 0.0f);
     // initialization of the camera reference system
     this->UpdateCameraVectors();
 
     is_sprint_toggled = false;
+    jumping = false;
+    falling = false;
 }
 
 glm::mat4 Camera::GetViewMatrix()
@@ -25,20 +28,31 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
     glm::vec3 direction(0,0,0);
     glm::vec3 zero(0,0,0);
 
+    glm::vec3 horizont_front;
+    glm::vec3 horizont_right;
+
+    horizont_front = glm::vec3(front.x, 0, front.z);
+    horizont_right = glm::vec3(right.x, 0, right.z);
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        direction += front;
+        direction += horizont_front;
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        direction += -front;
+        direction += -horizont_front;
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        direction += -right;
+        direction += -horizont_right;
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        direction += right;
+        direction += horizont_right;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !jumping && !falling) {
+        jumping = true;
+        last_jump_time = glfwGetTime();
     }
 
     if (direction == zero) {
@@ -46,7 +60,6 @@ glm::vec3 Camera::ProcessInput(GLFWwindow* window, GLfloat delta_time)
     }
 
     float movement_speed = (is_sprint_toggled) ? movement_speed_sprint : movement_speed_normal;
-
     return direction == zero ? zero : glm::normalize(direction) * movement_speed * delta_time;
 }
 
@@ -56,10 +69,8 @@ void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
     yoffset *= this->mouse_sensitivity;
 
     this->yaw += xoffset;
-    //this->pitch += yoffset;
     this->pitch -= yoffset;
 
-    // Constraint Pitch
     if (this->pitch > 89.0f) this->pitch = 89.0f;
     if (this->pitch < -89.0f) this->pitch = -89.0f;
 
@@ -81,4 +92,32 @@ void Camera::UpdateCameraVectors()
 void Camera::ToggleSprint()
 {
     is_sprint_toggled = !is_sprint_toggled;
+}
+
+void Camera::OnLand()
+{
+    jumping = false;
+    falling = false;
+}
+
+void Camera::StopJump() {
+    jumping = false;
+    falling = true;
+}
+
+bool Camera::IsJumping()
+{
+    return jumping;
+}
+bool Camera::Isfalling()
+{
+    return falling;
+}
+bool Camera::IsSprinting() {
+    return is_sprint_toggled;
+}
+
+void Camera::UpdateListenerPosition(Audio& audio)
+{
+    audio.UpdateListenerPosition(position, front, world_up);
 }

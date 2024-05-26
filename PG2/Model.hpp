@@ -1,30 +1,40 @@
 ﻿#pragma once
 
 #include <filesystem>
+#include <map>
 
 #include "Vertex.hpp"
 #include "Mesh.hpp"
 #include "ShaderProgram.hpp"
+#include "Texture.hpp"
 
 class Model
 {
 public:
     Model(glm::vec3 position, float scale, glm::vec4 rotation);
     Model(const std::filesystem::path& obj_file_path, const std::filesystem::path& texture_file_path, glm::vec3 position, float scale, glm::vec4 rotation);
-    static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation);
+    static Model* CreateTerrain(glm::vec3 position, float scale, glm::vec4 rotation, std::map<std::pair<unsigned int, unsigned int>, unsigned int>* heights);
     void Draw(ShaderProgram& shader);
+    float camera_distance;
+
+    glm::vec3 position{};
+
+    char id = 'u';
+    glm::vec3 collision_min{};
+    glm::vec3 collision_max{};
+    glm::vec4 rotation = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
+
 private:
     Mesh mesh;
     //std::vector<Mesh> meshes;
     std::string name;
 
-    glm::vec3 position{};
     float scale{};
-    glm::vec4 rotation;
+    glm::vec4 initial_rotation{};
 
     //GLuint LoadTexture(const std::filesystem::path& file_name);
     //...
-    //TODO GLuint Model::LoadTexture ?
+
 
     std::vector<Vertex> vertices{};
     std::vector<GLuint> vertex_indices{};
